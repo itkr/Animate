@@ -54,9 +54,9 @@
 		};
 		
 		// デバッグ用
-		var puts = function(str, element){
-			var br = document.createElement('br');
-			element.innerHTML = str + br + element.innerHTML;
+		var puts = function(str){
+			var element = $('console');
+			element.innerHTML = str + '<br>' + element.innerHTML;
 		};
 		
 		// ---- DOM ----
@@ -66,7 +66,8 @@
 			this.set = function(innerElement){
 				element.innerHTML = innerElement;
 			};
-		};		
+		};
+
 
 	};
 	
@@ -78,7 +79,7 @@
 		
 		var countManager = new models.CountManager();
 		var world = new views.WorldView();
-		world.set('こん');
+		world.set('set');
 	})();
 	
 })(document);
