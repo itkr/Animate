@@ -40,43 +40,50 @@
 	/**
 	 * Views
 	 * One object one element
-	 * テンプレートメソッドのような設計
+	 * テンプレートメソッドのような設計にする(TODO)
 	 * このオブジェクト以外でDOM操作を行わない
 	 */
-	ITKR_ANIM.Views = function(document){
+	ITKR_ANIM.Views = (function(document){
 	
 		// @TODO 汎用的に使えるメソッドをベースオブジェクトにまとめてコンクリートオブジェクトで継承する
 
 		// ---- 操作関数 ----		
 		// エレメント取得簡略化
-		var $ = function(id){
-			return document.getElementById(id);
-		};
+		//var $ = function(id){
+		//	return document.getElementById(id);
+		//};
 		
 		// デバッグ用
 		var puts = function(str){
 			var element = $('console');
 			element.innerHTML = str + '<br>' + element.innerHTML;
 		};
-		
-		// ---- DOM ----
-		// メインエレメント
-		this.WorldView = function(){
-			var element = $('world');
-			this.set = function(innerElement){
-				element.innerHTML = innerElement;
+
+		var View = function(document){
+			this.$ = function(id){
+				return document.getElementById(id);
 			};
 		};
+		
+		var objects = {
+			WorldView : function(){
+				var element = this.$('world');
+				this.set = function(innerElement){
+					element.innerHTML = innerElement;
+				};
+			},
+		};
+		objects.WorldView.prototype = new View(document);
+		
+		return objects;
 
-
-	};
+	})(document);
 	
 	// Controllers
 	(function(){
 		var models =  ITKR_ANIM.Models;
 		// @TODO newしない設計にする
-		var views = new ITKR_ANIM.Views(document);
-		
+		var views = ITKR_ANIM.Views;
 		var countManager = new models.CountManager();
 		var world = new views.WorldView();
 		world.set('set');
