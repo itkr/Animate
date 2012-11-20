@@ -2,7 +2,7 @@
 	var ITKR_ANIM = {};
 
 	// Models
-	ITKR_ANIM.Models = {
+	ITKR_ANIM.models = {
 		
 		/**
 		 * 数値管理オブジェクト(モデル例)
@@ -45,15 +45,15 @@
 	 * テンプレートメソッドのような設計にする(TODO)
 	 * このオブジェクト以外でDOM操作を行わない
 	 */
-	ITKR_ANIM.Views = (function(document){
+	ITKR_ANIM.views = (function(document){
 	
 		// @TODO 汎用的に使えるメソッドをベースオブジェクトにまとめてコンクリートオブジェクトで継承する
 		
 		// デバッグ用
-		var puts = function(str){
-			var element = $('console');
-			element.innerHTML = str + '<br>' + element.innerHTML;
-		};
+		//var puts = function(str){
+		//	var element = $('console');
+		//	element.innerHTML = str + '<br>' + element.innerHTML;
+		//};
 		
 		var objects = {
 			WorldView : function(){
@@ -85,11 +85,11 @@
 	 * 最初に初期化する関数
 	 */
 	ITKR_ANIM.init = function(document){
-		for(key in this.Views){
-			this.Views[key].prototype = new this.core.View(document);
+		for(key in this.views){
+			this.views[key].prototype = new this.core.View(document);
 		}
-		for(key in this.Models){
-			this.Models[key].prototype = new this.core.Model();
+		for(key in this.models){
+			this.models[key].prototype = new this.core.Model();
 		}
 	};
 	
@@ -97,8 +97,8 @@
 	(function(){
 		ITKR_ANIM.init(document);
 		
-		var models =  ITKR_ANIM.Models;
-		var views = ITKR_ANIM.Views;
+		var models =  ITKR_ANIM.models;
+		var views = ITKR_ANIM.views;
 		
 		var countManager = new models.CountManager();
 		var world = new views.WorldView();
