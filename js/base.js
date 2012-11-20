@@ -8,6 +8,8 @@
 		 * 数値管理オブジェクト(モデル例)
 		 */
 		CountManager : function(){
+		
+			this.meta = 'CountManager';
 			
 			// 管理する数値
 			var count = 0;
@@ -74,6 +76,9 @@
 				return document.getElementById(id);
 			};
 		},
+		Model : function(){
+			this.meta = 'NotExtended'
+		},
 	};
 	
 	/**
@@ -82,6 +87,9 @@
 	ITKR_ANIM.init = function(document){
 		for(key in this.Views){
 			this.Views[key].prototype = new this.core.View(document);
+		}
+		for(key in this.Models){
+			this.Models[key].prototype = new this.core.Model();
 		}
 	};
 	
