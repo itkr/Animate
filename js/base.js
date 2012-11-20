@@ -5,7 +5,7 @@
 	ITKR_ANIM.Models = {
 		
 		/**
-		 * 数値管理オブジェクト
+		 * 数値管理オブジェクト(モデル例)
 		 */
 		CountManager : function(){
 			
@@ -33,7 +33,7 @@
 			this.getCount = function(){
 				return count;
 			}	
-		} //,
+		},
 		
 	};
 	
@@ -46,23 +46,11 @@
 	ITKR_ANIM.Views = (function(document){
 	
 		// @TODO 汎用的に使えるメソッドをベースオブジェクトにまとめてコンクリートオブジェクトで継承する
-
-		// ---- 操作関数 ----		
-		// エレメント取得簡略化
-		//var $ = function(id){
-		//	return document.getElementById(id);
-		//};
 		
 		// デバッグ用
 		var puts = function(str){
 			var element = $('console');
 			element.innerHTML = str + '<br>' + element.innerHTML;
-		};
-
-		var View = function(document){
-			this.$ = function(id){
-				return document.getElementById(id);
-			};
 		};
 		
 		var objects = {
@@ -73,20 +61,41 @@
 				};
 			},
 		};
-		objects.WorldView.prototype = new View(document);
-		
 		return objects;
 
 	})(document);
 	
+	/**
+	 * ベースとなるオブジェクト群
+	 */
+	ITKR_ANIM.core = {
+		View : function(document){
+			this.$ = function(id){
+				return document.getElementById(id);
+			};
+		},
+	};
+	
+	/**
+	 * 最初に初期化する関数
+	 */
+	ITKR_ANIM.init = function(document){
+		for(key in this.Views){
+			this.Views[key].prototype = new this.core.View(document);
+		}
+	};
+	
 	// Controllers
 	(function(){
+		ITKR_ANIM.init(document);
+		
 		var models =  ITKR_ANIM.Models;
-		// @TODO newしない設計にする
 		var views = ITKR_ANIM.Views;
+		
 		var countManager = new models.CountManager();
 		var world = new views.WorldView();
-		world.set('set');
+		
+		world.set(countManager.getCount());
 	})();
 	
 })(document);
