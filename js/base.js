@@ -1,40 +1,29 @@
 (function(document){
-	var ITKR_ANIM = {};
+	var Animate = {};
 
 	// Models
-	ITKR_ANIM.models = {
+	Animate.models = {
 		
 		/**
 		 * 数値管理オブジェクト(モデル例)
 		 */
 		CountManager : function(){
-		
+
 			this.meta = 'CountManager';
-			
-			// 管理する数値
-			var count = 0;
-			
-			// 下限
-			var under = null;
-			
-			// 上限
-			var over = null;		
-			
-			// 数値の増加
+		
+			var count = 0,
+				  under = null,
+				  over = null
+
 			this.incrCount = function(number){
 				count += number;
 			}
-			
-			// 数値の減少
 			this.decrCount = function(number){
 				count -= number;
 			}
-			
-			// カウントの取得
-			// @TODO（あとでアクセサメソッドにする）
 			this.getCount = function(){
 				return count;
-			}	
+			};
 		},
 		
 	};
@@ -45,7 +34,7 @@
 	 * テンプレートメソッドのような設計に
 	 * このオブジェクト以外でDOM操作を行わない
 	 */
-	ITKR_ANIM.views = (function(document){
+	Animate.views = (function(document){
 
 		var objects = {
 			WorldView : function(){
@@ -58,21 +47,39 @@
 	/**
 	 * ベースとなるオブジェクト群
 	 */
-	ITKR_ANIM.core = {
-		View : function(element){
-			this.set = function(innerElement){
-				element.innerHTML = innerElement;
-			};
-		},
-		Model : function(){
-			this.meta = 'NotExtended';
-		},
-	};
+	Animate.core = (function(){
+		var objects = {
+			View : function(element){
+				this.set = function(innerElement){
+					element.innerHTML = innerElement;
+				};
+				this.createBox = function(){
+					
+				};
+			},
+			Model : function(){
+				this.meta = 'NotExtended';
+			},
+		};
+		return objects;	
+	})();
+	
+	/**
+	 *
+	 */
+	 Animate.fn = {
+	 };
+	 
+	 /**
+	  *
+	  */
+	 Animate.events = {
+	 };
 	
 	/**
 	 * 最初に初期化する関数
 	 */
-	ITKR_ANIM.init = function(document){
+	Animate.init = function(document){
 		for(key in this.views){
 			var view = this.views[key];
 			view.prototype = new this.core.View(document.getElementById(key));
@@ -82,13 +89,13 @@
 			model.prototype = new this.core.Model();
 		}
 	};
-	
+
 	// Controllers
 	(function(){
-		ITKR_ANIM.init(document);
+		Animate.init(document);
 		
-		var models =  ITKR_ANIM.models;
-		var views = ITKR_ANIM.views;
+		var models =  Animate.models;
+		var views = Animate.views;
 		
 		var countManager = new models.CountManager();
 		var world = new views.WorldView();
@@ -96,4 +103,4 @@
 		world.set(countManager.getCount());
 	})();
 	
-})(document);
+})(window.document);
