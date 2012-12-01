@@ -2,3 +2,6 @@ html,body,h1,h2,h3,h4,h5,a,b,s,u,i,span,div,p,ul,ol,li,dl,dt,dd{
 	margin:0;
 	padding:0;
 }
+.box{
+	border : solid 1px #3366ff; /* 仮 */
+}
