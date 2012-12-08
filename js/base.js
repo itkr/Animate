@@ -38,6 +38,7 @@
 		var objects = {
 			WorldView : function(){
 				var countManager = new models.CountManager();
+				countManager.incrCount(1);
 				this.set(countManager.getCount());
 				this.createBox();
 			},
@@ -53,12 +54,15 @@
 		var objects = {
 
 			View : function(element){
+				// elementの中身を初期化
 				this.set = function(elem){
 					element.innerHTML = elem;
 				};
+				// elementに追加
 				this.append = function(elem){
 					element.appendChild(elem);
 				};
+				// box(DIV)を作成
 				this.createBox = function(){
 					var box = document.createElement('div');
 					box.innerHTML = 'hoge';
@@ -66,9 +70,20 @@
 					element.appendChild(box);
 					return box;
 				};
+				// 表示させる
 				this.display = function(){
-				
 				};
+				// 見えないようにする
+				this.hide = function(){
+				};
+			},
+
+			CanvasView : function(element){
+
+			},
+
+			Scene : function(element){
+
 			},
 
 			Model : function(){
@@ -78,18 +93,18 @@
 		};
 		return objects;	
 	})();
-	
+
 	/**
-	 *
+	 * アプリケーション全体に関わる関数など
 	 */
 	 Animate.fn = {
 	 	extend : function(){
 	 		// @TODO 実装
 	 	}
 	 };
-	 
+
 	 /**
-	  *
+	  *  独自イベントハンドラ
 	  */
 	 Animate.events = (function(document){
 	 	var objects = {
@@ -97,6 +112,16 @@
 	 	};
 	 	return objects;
 	 })(document);
+	 
+	 /**
+	  * 外部ライブラリ関連
+	  */
+	  Animate.lib = (function{
+	  	var objects = {
+	  	
+	  	};
+	  	return objects;
+	  })();
 	
 	/**
 	 * 最初に初期化する関数
