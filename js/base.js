@@ -238,6 +238,17 @@
 	 		return this.update(dest, sources);
 	 	},
 
+	 	// 汎用的イベントハンドラ
+	 	listenEvent : function(eventTarget, eventType, eventHandler){
+		    if(eventTarget.addEventListener){
+				eventTarget.addEventListener(eventType,eventHandler,false);
+			}else if(eventTarget.attachEvent){
+				eventType = "on" + eventType;
+				eventTarget.attachEvent(eventType,eventHandler);
+			}else{
+				eventTarget["on" + eventType] = eventHandler;
+			}
+		}
 	 };
 	 
 	 Animate.tools = (function(){
