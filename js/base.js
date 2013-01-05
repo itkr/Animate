@@ -3,10 +3,6 @@
 (function(document) {
 	var Animate = {};
 
-	Animate.statuses = {
-		currentScene : 1
-	};
-
 	/**
 	 * ベースとなるオブジェクト群
 	 */
@@ -14,10 +10,6 @@
 		var objects = {
 
 			View : function(element) {
-				// 初期化
-				this.set = function() {
-					document.getElementById('body').appendChild(element);
-				};
 
 				// elementに追加
 				this.append = function(elem) {
@@ -42,23 +34,14 @@
 				};
 			},
 
-			CanvasView : function() {
-
-				var INSCRIBED_CIRCLE = 0.298;
+			CanvasView : function(element) {
 				// 正三角形の内接円の半径
-				var CIRCUMCIRCLE = 0.577;
+				var INSCRIBED_CIRCLE = 0.298;
 				// 正三角形の外接円の半径
-				var element = document.createElement('canvas');
+				var CIRCUMCIRCLE = 0.577;
+				// かり
+				//var element = document.createElement('canvas');
 				var context = element.getContext('2d');
-
-				// elementの中身を初期化
-
-				var set = function(width, height) {
-					document.getElementById('body').appendChild(element);
-					element.width = width;
-					element.height = height;
-				};
-				this.set = set;
 
 				// 正三角形の塗り
 				this.drawFillTriangle = function(centerX, centerY, edge, color) {
@@ -181,13 +164,56 @@
 			},
 
 			Scene : function(element) {
-				this.set = function() {
-					document.getElementById('body').appendChild(element);
+				this.addView = function(Obj, name) {
+					var view_element = document.createElement('div');
+					Obj.prototype = new Animate.core.View(view_element);
+					element.appendChild(view_element);
+					return new Obj();
+				};
+				this.addCanvas = function(Obj, name) {
+					// 仮
+					var width = 500, height = 500;
+					var canvas_view_element = document.createElement('canvas');
+					Obj.prototype = new Animate.core.CanvasView(canvas_view_element);
+					element.appendChild(canvas_view_element);
+					canvas_view_element.width = width;
+					canvas_view_element.height = height;
+					return new Obj(width, height);
+				};
+				this.removeView = function() {
+
+				};
+				this.removeCanvas = function() {
+
 				};
 			},
 
 			Model : function() {
 				this.meta = 'NotExtended';
+			},
+
+			World : function(document) {
+				var currentScene = 0, currentAction = 0, sceneList = [], actionList = []
+				this.play = function() {
+
+				};
+				this.next = function() {
+
+				};
+				this.prev = function() {
+
+				};
+				this.addScene = function(obj, name) {
+					var scene_element = document.createElement('div');
+					obj.prototype = new Animate.core.Scene(scene_element);
+					document.getElementsByTagName('body')[0].appendChild(scene_element);
+					sceneList.push(obj);
+					return new obj();
+				};
+				this.removeScene = function() {
+
+				};
+
 			}
 		};
 		return objects;
@@ -268,25 +294,18 @@
 		return objects;
 	})();
 
+	Animate.fn = (function() {
+		var objects = {
+			init : function(document) {
+				return new Animate.core.World(document);
+			}
+		};
+		return objects;
+	})();
 	/**
 	 * 最初に初期化する関数
 	 */
 	Animate.init = function(document) {
-		for (key in this.scenes) {
-			var klass = this.scenes[key];
-			var element = document.createElement('div');
-			klass.prototype = new this.core.Scene(element);
-		}
-		for (key in this.views) {
-			var klass = this.views[key];
-			var element = document.createElement('div');
-			klass.prototype = new this.core.View(element);
-		}
-		for (key in this.canvasViews) {
-			var klass = this.canvasViews[key];
-			var element = document.createElement('canvas');
-			klass.prototype = new this.core.CanvasView(element);
-		}
 		for (key in this.models) {
 			var klass = this.models[key];
 			klass.prototype = new this.core.Model();
@@ -314,80 +333,29 @@
 		}
 	};
 
-	// ----- 実装クラス -----
-
-	/**
-	 * Views
-	 * One object one element
-	 * テンプレートメソッドのような設計に
-	 * このオブジェクト以外でDOM操作を行わない
-	 */
-	Animate.views = (function(document) {
-		var models = Animate.models;
-
-		// @TODO element.foo()の様にView内のメソッド呼べる用にする
-		var objects = {
-			WorldView : function() {
-				this.set();
-				var countManager = new models.CountManager();
-				countManager.incrCount(4);
-				this.createBox();
-			},
-		};
-
-		return objects;
-	})(document);
-
-	/**
-	 * CanvasViews
-	 */
-	Animate.canvasViews = (function(document) {
-		var models = Animate.models;
-
-		// @TODO element.foo()の様にView内のメソッド呼べる用にする
-		var objects = {
-			MainCanvasView : function(width, height) {
-				var that = this;
-				this.set(width, height);
-				this.drawFillTriangle(width / 2, height / 2, 60, '#3366ff');
-				this.drawStrokeTriangle(width / 2, height / 2, 60, {
-					color : '#cc6666',
-					lineWidth : 6
-				});
-				//this.draw(width, height);
-			}
-		};
-
-		return objects;
-	})(document);
-
-	/**
-	 * Scenes
-	 */
-	Animate.scenes = (function(document) {
-		var models = Animate.models;
-
-		// @TODO element.foo()の様にView内のメソッド呼べる用にする
-		var objects = {
-			MainScene : function() {
-				this.set();
-				var countManager = new models.CountManager();
-				countManager.incrCount(4);
-				this.createBox();
-			},
-		};
-
-		return objects;
-	})(document);
+	var $A = Animate;
 
 	// Controllers
 	(function() {
-		Animate.init(document);
-		var scenes = Animate.scenes;
-		var views = Animate.views;
-		var canvasViews = Animate.canvasViews;
-		//var world = new views.WorldView();
-		//var main_canvas = new canvasViews.MainCanvasView(600,600);
+		$A.init(document);
+		var models = $A.Models;
+		// プロジェクト
+		var world = $A.fn.init(document);
+		// 最初のシーン
+		var scene1 = world.addScene(function() {
+
+		}, 'scene1');
+		scene1.addView(function() {
+			this.createBox();
+		}, 'scene1_view1');
+		scene1.addCanvas(function(width, height) {
+			this.drawFillTriangle(width / 2, height / 2, 60, '#3366ff');
+			this.drawStrokeTriangle(width / 2, height / 2, 60, {
+				color : '#cc6666',
+				lineWidth : 6
+			});
+			this.draw(width, height);
+		}, 'scene1_canvas1');
 	})();
 
-})(window.document); 
+})(window.document);
