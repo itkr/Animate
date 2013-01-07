@@ -188,10 +188,6 @@
 				};
 			},
 
-			Model : function() {
-				this.meta = 'NotExtended';
-			},
-
 			World : function(document) {
 				var currentScene = 0, currentAction = 0, sceneList = [], actionList = []
 				this.play = function() {
@@ -302,43 +298,12 @@
 		};
 		return objects;
 	})();
-	/**
-	 * 最初に初期化する関数
-	 */
-	Animate.init = function(document) {
-		for (key in this.models) {
-			var klass = this.models[key];
-			klass.prototype = new this.core.Model();
-		}
-	};
-
-	// Models
-	Animate.models = {
-
-		/**
-		 * 数値管理オブジェクト(モデル例)
-		 */
-		CountManager : function() {
-			this.meta = 'CountManager';
-			var count = 0, under = null, over = null
-			this.incrCount = function(number) {
-				count += number;
-			}
-			this.decrCount = function(number) {
-				count -= number;
-			}
-			this.getCount = function() {
-				return count;
-			};
-		}
-	};
 
 	var $A = Animate;
 
 	// Controllers
 	(function() {
-		$A.init(document);
-		var models = $A.Models;
+
 		// プロジェクト
 		var world = $A.fn.init(document);
 
@@ -349,7 +314,7 @@
 			this.addView(function() {
 				this.createBox();
 			}, 'scene1_view1');
-			
+
 			// canvas view
 			this.addCanvas(function(width, height) {
 				this.drawFillTriangle(width / 2, height / 2, 60, '#3366ff');
@@ -362,17 +327,16 @@
 
 		}, 'scene1');
 
-
 		// scene1.addView(function() {
 		// this.createBox();
 		// }, 'scene1_view1');
 		// scene1.addCanvas(function(width, height) {
-			// this.drawFillTriangle(width / 2, height / 2, 60, '#3366ff');
-			// this.drawStrokeTriangle(width / 2, height / 2, 60, {
-				// color : '#cc6666',
-				// lineWidth : 6
-			// });
-			// this.draw(width, height);
+		// this.drawFillTriangle(width / 2, height / 2, 60, '#3366ff');
+		// this.drawStrokeTriangle(width / 2, height / 2, 60, {
+		// color : '#cc6666',
+		// lineWidth : 6
+		// });
+		// this.draw(width, height);
 		// }, 'scene1_canvas1');
 	})();
 
