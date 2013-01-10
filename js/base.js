@@ -201,6 +201,7 @@
 				};
 				this.addScene = function(obj, name) {
 					var scene_element = document.createElement('div');
+					scene_element.setAttribute('class','scene');
 					obj.prototype = new Animate.core.Scene(scene_element);
 					document.getElementsByTagName('body')[0].appendChild(scene_element);
 					sceneList.push(obj);
@@ -322,7 +323,7 @@
 					color : '#cc6666',
 					lineWidth : 6
 				});
-				this.draw(width, height);
+				// this.draw(width, height);
 			}, 'scene1_canvas1');
 
 		}, 'scene1');

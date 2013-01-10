@@ -3,11 +3,22 @@ html,body,h1,h2,h3,h4,h5,a,b,s,u,i,span,div,p,ul,ol,li,dl,dt,dd{
 	padding:0;
 }
 body{
+	padding:20px;
+	text-align:center;
     background-color:#cccccc;
 }
 canvas{
-    background-color:#ffffff;
+    background-color:#ccccff;
 }
 .box{
-	border : solid 1px #3366ff; /* 仮 */
+	background-color:#3366ff;
+}
+.scene{
+	display:block;
+	width:800px;
+	height:600px;
+	margin:auto;
+	border:3px solid #000000;
+	text-align:center;
+	background-color:#ffffff;
 }
