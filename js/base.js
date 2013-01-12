@@ -164,10 +164,27 @@
 			},
 
 			Scene : function(element) {
+				var currentAction = 0, actionList = [];
+				this.next = function(){
+					if(currentAction === actionList.length){
+						return false;
+					}
+					currentAction += 1;
+					return true;
+				};
+				this.prev = function(){
+					if(currentAction === 0){
+						return false;
+					}
+					currentAction -= 1;
+					return true;
+				};
+				this.addAction = function(){
+					
+				};
 				this.addView = function(Obj, name) {
 					var view_element = document.createElement('div');
-//					Obj.prototype = new Animate.core.View(view_element);
-					Animate.app.extend(Obj, Animate.core.View, view_element)
+					Animate.tools.extend(Obj, Animate.core.View, view_element)
 					element.appendChild(view_element);
 					return new Obj();
 				};
@@ -175,8 +192,7 @@
 					// 仮
 					var width = 500, height = 500;
 					var canvas_view_element = document.createElement('canvas');
-//					Obj.prototype = new Animate.core.CanvasView(canvas_view_element);
-					Animate.app.extend(Obj, Animate.core.CanvasView, canvas_view_element)
+					Animate.tools.extend(Obj, Animate.core.CanvasView, canvas_view_element)
 					element.appendChild(canvas_view_element);
 					canvas_view_element.width = width;
 					canvas_view_element.height = height;
@@ -191,20 +207,28 @@
 			},
 
 			World : function(document) {
-				var currentScene = 0, currentAction = 0, sceneList = [], actionList = []
+				var currentScene = 0, sceneList = [];
 				this.play = function() {
-
+					
 				};
 				this.next = function() {
-
+					if(currentScene === sceneList.length){
+						return false;
+					}
+					currentScene += 1;
+					return true;
 				};
 				this.prev = function() {
-
+					if(currentScene === 0){
+						return false;
+					}
+					currentScene -= 1;
+					return true;
 				};
 				this.addScene = function(Obj, name) {
 					var scene_element = document.createElement('div');
 					scene_element.setAttribute('class','scene');
-					Animate.app.extend(Obj, Animate.core.Scene, scene_element)
+					Animate.tools.extend(Obj, Animate.core.Scene, scene_element)
 					document.getElementsByTagName('body')[0].appendChild(scene_element);
 					sceneList.push(Obj);
 					return new Obj();
@@ -213,7 +237,15 @@
 
 				};
 
+			},
+			
+			Action : function(){
+				// Tweenerっぽくしたい
+				this.play = function(){
+					
+				};
 			}
+
 		};
 		return objects;
 	})();
@@ -221,7 +253,7 @@
 	/**
 	 * アプリケーション全体に関わる関数など
 	 */
-	Animate.app = {
+	Animate.tools = {
 
 		//継承実装1
 		update : function(dest, sources) {
@@ -278,12 +310,6 @@
 		}
 	};
 
-	Animate.tools = (function() {
-		var objects = {
-		};
-		return objects;
-	})();
-
 	/**
 	 *  独自イベントハンドラ
 	 */
@@ -313,20 +339,19 @@
 
 	var $A = Animate;
 
-	// Controllers
 	(function() {
-
-		// プロジェクト
+		/**
+		 * Project
+		 */
 		var world = $A.fn.init(document);
-
-		// ---- 最初のシーン ----
+		/**
+		 * Scene1
+		 */
 		var scene1 = world.addScene(function() {
-
 			// box view
 			this.addView(function() {
 				this.createBox();
 			}, 'scene1_view1');
-
 			// canvas view
 			this.addCanvas(function(width, height) {
 				this.drawFillTriangle(width / 2, height / 2, 60, '#3366ff');
@@ -336,20 +361,7 @@
 				});
 				// this.draw(width, height);
 			}, 'scene1_canvas1');
-
 		}, 'scene1');
-
-		// scene1.addView(function() {
-		// this.createBox();
-		// }, 'scene1_view1');
-		// scene1.addCanvas(function(width, height) {
-		// this.drawFillTriangle(width / 2, height / 2, 60, '#3366ff');
-		// this.drawStrokeTriangle(width / 2, height / 2, 60, {
-		// color : '#cc6666',
-		// lineWidth : 6
-		// });
-		// this.draw(width, height);
-		// }, 'scene1_canvas1');
 	})();
 
 })(window.document);
