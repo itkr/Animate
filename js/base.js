@@ -166,7 +166,8 @@
 			Scene : function(element) {
 				this.addView = function(Obj, name) {
 					var view_element = document.createElement('div');
-					Obj.prototype = new Animate.core.View(view_element);
+//					Obj.prototype = new Animate.core.View(view_element);
+					Animate.app.extend(Obj, Animate.core.View, view_element)
 					element.appendChild(view_element);
 					return new Obj();
 				};
@@ -174,7 +175,8 @@
 					// 仮
 					var width = 500, height = 500;
 					var canvas_view_element = document.createElement('canvas');
-					Obj.prototype = new Animate.core.CanvasView(canvas_view_element);
+//					Obj.prototype = new Animate.core.CanvasView(canvas_view_element);
+					Animate.app.extend(Obj, Animate.core.CanvasView, canvas_view_element)
 					element.appendChild(canvas_view_element);
 					canvas_view_element.width = width;
 					canvas_view_element.height = height;
@@ -199,13 +201,13 @@
 				this.prev = function() {
 
 				};
-				this.addScene = function(obj, name) {
+				this.addScene = function(Obj, name) {
 					var scene_element = document.createElement('div');
 					scene_element.setAttribute('class','scene');
-					obj.prototype = new Animate.core.Scene(scene_element);
+					Animate.app.extend(Obj, Animate.core.Scene, scene_element)
 					document.getElementsByTagName('body')[0].appendChild(scene_element);
-					sceneList.push(obj);
-					return new obj();
+					sceneList.push(Obj);
+					return new Obj();
 				};
 				this.removeScene = function() {
 
@@ -230,28 +232,37 @@
 		},
 
 		// 継承実装2
-		extend : function(parent, child) {
-			var extendLight = function(p, c) {
-				var j;
-				for (j in p) {
-					if (p.hasOwnProperty(j)) {
-						c[j] == p[j];
-					}
-				}
-				return c;
-			};
-			var i = 0, toStr = Object.prototype.toString, astr = "[object Array]";
-			for (i in parent) {
-				if (parent.hasOwnProperty(i)) {
-					if ( typeof parent[i] === "object") {
-						child[i] = (toStr.call(parent[i]) === astr) ? [] : {};
-						extendLight(parent[i], child[i]);
-					} else {
-						child[i] = parent[i];
-					}
-				}
-			}
-			return child;
+//		extend : function(parent, child) {
+//			var extendLight = function(p, c) {
+//				var j;
+//				for (j in p) {
+//					if (p.hasOwnProperty(j)) {
+//						c[j] == p[j];
+//					}
+//				}
+//				return c;
+//			};
+//			var i = 0, toStr = Object.prototype.toString, astr = "[object Array]";
+//			for (i in parent) {
+//				if (parent.hasOwnProperty(i)) {
+//					if ( typeof parent[i] === "object") {
+//						child[i] = (toStr.call(parent[i]) === astr) ? [] : {};
+//						extendLight(parent[i], child[i]);
+//					} else {
+//						child[i] = parent[i];
+//					}
+//				}
+//			}
+//			return child;
+//		},
+		
+		extend : function(Child, Parent, element){
+			 if(arguments.length == 3){
+			 	Child.prototype = new Parent(element);
+			 }else{
+				Child.prototype = new Parent();
+			 };
+			 return Child;
 		},
 
 		// 汎用的イベントハンドラ
