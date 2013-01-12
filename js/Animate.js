@@ -1,6 +1,5 @@
-// @TODO スコープとか
-
-(function(document) {
+(function(global) {
+	var document = global.document;
 	var Animate = {};
 
 	/**
@@ -165,22 +164,22 @@
 
 			Scene : function(element) {
 				var currentAction = 0, actionList = [];
-				this.next = function(){
-					if(currentAction === actionList.length){
+				this.next = function() {
+					if (currentAction === actionList.length) {
 						return false;
 					}
 					currentAction += 1;
 					return true;
 				};
-				this.prev = function(){
-					if(currentAction === 0){
+				this.prev = function() {
+					if (currentAction === 0) {
 						return false;
 					}
 					currentAction -= 1;
 					return true;
 				};
-				this.addAction = function(){
-					
+				this.addAction = function() {
+
 				};
 				this.addView = function(Obj, name) {
 					var view_element = document.createElement('div');
@@ -209,17 +208,17 @@
 			World : function(document) {
 				var currentScene = 0, sceneList = [];
 				this.play = function() {
-					
+
 				};
 				this.next = function() {
-					if(currentScene === sceneList.length){
+					if (currentScene === sceneList.length) {
 						return false;
 					}
 					currentScene += 1;
 					return true;
 				};
 				this.prev = function() {
-					if(currentScene === 0){
+					if (currentScene === 0) {
 						return false;
 					}
 					currentScene -= 1;
@@ -227,7 +226,7 @@
 				};
 				this.addScene = function(Obj, name) {
 					var scene_element = document.createElement('div');
-					scene_element.setAttribute('class','scene');
+					scene_element.setAttribute('class', 'scene');
 					Animate.tools.extend(Obj, Animate.core.Scene, scene_element)
 					document.getElementsByTagName('body')[0].appendChild(scene_element);
 					sceneList.push(Obj);
@@ -238,14 +237,13 @@
 				};
 
 			},
-			
-			Action : function(){
+
+			Action : function() {
 				// Tweenerっぽくしたい
-				this.play = function(){
-					
+				this.play = function() {
+
 				};
 			}
-
 		};
 		return objects;
 	})();
@@ -264,37 +262,37 @@
 		},
 
 		// 継承実装2
-//		extend : function(parent, child) {
-//			var extendLight = function(p, c) {
-//				var j;
-//				for (j in p) {
-//					if (p.hasOwnProperty(j)) {
-//						c[j] == p[j];
-//					}
-//				}
-//				return c;
-//			};
-//			var i = 0, toStr = Object.prototype.toString, astr = "[object Array]";
-//			for (i in parent) {
-//				if (parent.hasOwnProperty(i)) {
-//					if ( typeof parent[i] === "object") {
-//						child[i] = (toStr.call(parent[i]) === astr) ? [] : {};
-//						extendLight(parent[i], child[i]);
-//					} else {
-//						child[i] = parent[i];
-//					}
-//				}
-//			}
-//			return child;
-//		},
-		
-		extend : function(Child, Parent, element){
-			 if(arguments.length == 3){
-			 	Child.prototype = new Parent(element);
-			 }else{
+		//		extend : function(child, parent) {
+		//			var extendLight = function(p, c) {
+		//				var j;
+		//				for (j in p) {
+		//					if (p.hasOwnProperty(j)) {
+		//						c[j] == p[j];
+		//					}
+		//				}
+		//				return c;
+		//			};
+		//			var i = 0, toStr = Object.prototype.toString, astr = "[object Array]";
+		//			for (i in parent) {
+		//				if (parent.hasOwnProperty(i)) {
+		//					if ( typeof parent[i] === "object") {
+		//						child[i] = (toStr.call(parent[i]) === astr) ? [] : {};
+		//						extendLight(parent[i], child[i]);
+		//					} else {
+		//						child[i] = parent[i];
+		//					}
+		//				}
+		//			}
+		//			return child;
+		//		},
+
+		extend : function(Child, Parent, element) {
+			if (arguments.length == 3) {
+				Child.prototype = new Parent(element);
+			} else {
 				Child.prototype = new Parent();
-			 };
-			 return Child;
+			};
+			return Child;
 		},
 
 		// 汎用的イベントハンドラ
@@ -337,31 +335,7 @@
 		return objects;
 	})();
 
-	var $A = Animate;
+	global.$A = Animate;
+	global.Animate = Animate;
 
-	(function() {
-		/**
-		 * Project
-		 */
-		var world = $A.fn.init(document);
-		/**
-		 * Scene1
-		 */
-		var scene1 = world.addScene(function() {
-			// box view
-			this.addView(function() {
-				this.createBox();
-			}, 'scene1_view1');
-			// canvas view
-			this.addCanvas(function(width, height) {
-				this.drawFillTriangle(width / 2, height / 2, 60, '#3366ff');
-				this.drawStrokeTriangle(width / 2, height / 2, 60, {
-					color : '#cc6666',
-					lineWidth : 6
-				});
-				// this.draw(width, height);
-			}, 'scene1_canvas1');
-		}, 'scene1');
-	})();
-
-})(window.document);
+})(this);
