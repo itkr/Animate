@@ -13,6 +13,7 @@
 			View : function() {
 
 				var element = document.createElement('div');
+				element.setAttribute('class', 'view');
 				var that = this;
 				this.width = function(width) {
 					if ( typeof width === 'number') {
@@ -28,6 +29,14 @@
 						element.style.height = height + 'px';
 					}
 					return element.height;
+				};
+
+				this.x = function(x) {
+					element.style.left = x + 'px';
+				};
+
+				this.y = function(y) {
+					element.style.top = y + 'px';
 				};
 
 				this.setTo = function(parent_element) {
@@ -67,7 +76,9 @@
 
 				var element = document.createElement('canvas');
 				var context = element.getContext('2d');
+				var that = this;
 
+				element.setAttribute('class', 'canvasView');
 				this.width = function(width) {
 					if ( typeof width === 'number') {
 						element.width = width;
@@ -82,6 +93,14 @@
 						element.style.height = height + 'px';
 					}
 					return element.height;
+				};
+
+				this.x = function(x) {
+					element.style.left = x + 'px';
+				};
+
+				this.y = function(y) {
+					element.style.top = y + 'px';
 				};
 
 				this.setTo = function(parent_element) {

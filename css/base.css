@@ -1,24 +1,37 @@
-html,body,h1,h2,h3,h4,h5,a,b,s,u,i,span,div,p,ul,ol,li,dl,dt,dd{
-	margin:0;
-	padding:0;
+html, body, h1, h2, h3, h4, h5, a, b, s, u, i, span, div, p, ul, ol, li, dl, dt, dd {
+	margin: 0;
+	padding: 0;
 }
-body{
-	padding:20px;
-	text-align:center;
-    background-color:#cccccc;
+body {
+	padding: 20px;
+	text-align: center;
+	background-color: #cccccc;
 }
-canvas{
-    background-color:#ccccff;
+canvas {
+	background-color: #ccccff;
 }
-.box{
-	background-color:#3366ff;
+.box {
+	background-color: #3366ff;
 }
-.scene{
-	display:block;
-	width:800px;
-	height:600px;
-	margin:auto;
-	border:3px solid #000000;
-	text-align:center;
-	background-color:#ffffff;
+.world {
+
+}
+.scene {
+	position: relative;
+	display: block;
+	width: 800px;
+	height: 600px;
+	margin: auto;
+	border: 3px solid #000000;
+	text-align: center;
+	background-color: #ffffff;
+}
+.view {
+	position: absolute;
+}
+.canvasView {
+	position: absolute;
+}
+.textView {
+	position: absolute;
 }

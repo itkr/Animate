@@ -14,12 +14,17 @@
 		this.addView(function() {
 			this.width(100);
 			this.height(100);
+			this.x(5);
+			this.y(5);
 			this.createBox();
 		}, 'scene1_view1');
+
 		// canvas view
 		this.addCanvas(function() {
 			var width = this.width(500);
 			var height = this.height(500);
+			this.x(15);
+			this.y(15);
 			this.drawFillTriangle(width / 2, height / 2, 60, '#3366ff');
 			this.drawStrokeTriangle(width / 2, height / 2, 60, {
 				color : '#cc6666',
