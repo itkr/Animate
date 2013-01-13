@@ -6,18 +6,29 @@
 	var body = document.getElementsByTagName('body')[0];
 	var world = $A.init(body);
 
+	// ---- デバッグ用 ----
+	var next_a = document.createElement('a');
+	var next_text = document.createTextNode('next');
+	next_a.setAttribute('href', 'javascript:void(0)');
+	next_a.onclick = function() {
+		world.next()
+	};
+	next_a.appendChild(next_text);
+	body.appendChild(next_a);
+	// ---- デバッグ用 ----
+
 	/**
 	 * Scene1
 	 */
 	var scene1 = world.addScene(function() {
 		// box view
-		this.add($A.view(function() {
+		var view1 = this.add($A.view(function() {
 			this.width(150);
 			this.height(150);
 			this.x(5);
 			this.y(5);
 			this.createBox();
-		}), 'scene1_view1');
+		}), 'scene1_view1').hide();
 
 		// canvas view
 		this.add($A.canvas(function() {
@@ -32,6 +43,10 @@
 			});
 			// this.draw(width, height);
 		}), 'scene1_canvas1');
+
+		this.addAction($A.action(function() {
+			view1.display();
+		}));
 	}, 'scene1');
 
 	/**

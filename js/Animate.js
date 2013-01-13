@@ -5,6 +5,62 @@
 	var Animate = {};
 
 	/**
+	 * アプリケーション全体に関わる関数など
+	 */
+	Animate.tools = {
+
+		//継承実装1
+		update : function(dest, sources) {
+			for (var property in sources) {
+				dest[property] = sources[property];
+			}
+			return dest;
+		},
+
+		// 継承実装2
+		//		extend : function(child, parent) {
+		//			var extendLight = function(p, c) {
+		//				var j;
+		//				for (j in p) {
+		//					if (p.hasOwnProperty(j)) {
+		//						c[j] == p[j];
+		//					}
+		//				}
+		//				return c;
+		//			};
+		//			var i = 0, toStr = Object.prototype.toString, astr = "[object Array]";
+		//			for (i in parent) {
+		//				if (parent.hasOwnProperty(i)) {
+		//					if ( typeof parent[i] === "object") {
+		//						child[i] = (toStr.call(parent[i]) === astr) ? [] : {};
+		//						extendLight(parent[i], child[i]);
+		//					} else {
+		//						child[i] = parent[i];
+		//					}
+		//				}
+		//			}
+		//			return child;
+		//		},
+
+		extend : function(Child, Parent) {
+			Child.prototype = new Parent();
+			return Child;
+		},
+
+		// 汎用的イベントハンドラ
+		listenEvent : function(eventTarget, eventType, eventHandler) {
+			if (eventTarget.addEventListener) {
+				eventTarget.addEventListener(eventType, eventHandler, false);
+			} else if (eventTarget.attachEvent) {
+				eventType = "on" + eventType;
+				eventTarget.attachEvent(eventType, eventHandler);
+			} else {
+				eventTarget["on" + eventType] = eventHandler;
+			}
+		}
+	};
+
+	/**
 	 * ベースとなるオブジェクト群
 	 */
 	Animate.core = (function() {
@@ -41,6 +97,7 @@
 
 				this.setTo = function(parent_element) {
 					parent_element.appendChild(element);
+					return this;
 				};
 
 				// elementに追加
@@ -61,10 +118,14 @@
 
 				// 表示させる
 				this.display = function() {
+					element.style.display = 'block';
+					return this;
 				};
 
 				// 見えないようにする
 				this.hide = function() {
+					element.style.display = 'none';
+					return this;
 				};
 			},
 
@@ -105,6 +166,14 @@
 
 				this.setTo = function(parent_element) {
 					parent_element.appendChild(element);
+				};
+				// 表示させる
+				this.display = function() {
+					element.style.display = 'block';
+				};
+				// 見えないようにする
+				this.hide = function() {
+					element.style.display = 'none';
 				};
 
 				// 正三角形の塗り
@@ -238,6 +307,7 @@
 					if (currentAction === actionList.length) {
 						return false;
 					}
+					actionList[currentAction]();
 					currentAction += 1;
 					return true;
 				};
@@ -248,8 +318,8 @@
 					currentAction -= 1;
 					return true;
 				};
-				this.addAction = function() {
-
+				this.addAction = function(action) {
+					actionList.push(action);
 				};
 				this.add = function(Obj, name) {
 					var obj = new Obj();
@@ -270,11 +340,14 @@
 
 				};
 				this.next = function() {
-					if (currentScene === sceneList.length) {
-						return false;
-					}
-					currentScene += 1;
-					return true;
+					if (sceneList[currentScene].next() == false) {
+
+						if (currentScene === sceneList.length) {
+							return false;
+						}
+						currentScene += 1;
+						return true;
+					};
 				};
 				this.prev = function() {
 					if (currentScene === 0) {
@@ -285,8 +358,8 @@
 				};
 				this.addScene = function(Obj, name) {
 					Animate.tools.extend(Obj, Animate.core.Scene)
-					sceneList.push(Obj);
 					var obj = new Obj();
+					sceneList.push(obj);
 					obj.setTo(element);
 					return obj;
 				};
@@ -303,64 +376,10 @@
 				};
 			}
 		};
+		// Viewを継承してCanvasViewをつくる
+		// Animate.tools.extend(objects.CanvasView, objects.View)
 		return objects;
 	})();
-
-	/**
-	 * アプリケーション全体に関わる関数など
-	 */
-	Animate.tools = {
-
-		//継承実装1
-		update : function(dest, sources) {
-			for (var property in sources) {
-				dest[property] = sources[property];
-			}
-			return dest;
-		},
-
-		// 継承実装2
-		//		extend : function(child, parent) {
-		//			var extendLight = function(p, c) {
-		//				var j;
-		//				for (j in p) {
-		//					if (p.hasOwnProperty(j)) {
-		//						c[j] == p[j];
-		//					}
-		//				}
-		//				return c;
-		//			};
-		//			var i = 0, toStr = Object.prototype.toString, astr = "[object Array]";
-		//			for (i in parent) {
-		//				if (parent.hasOwnProperty(i)) {
-		//					if ( typeof parent[i] === "object") {
-		//						child[i] = (toStr.call(parent[i]) === astr) ? [] : {};
-		//						extendLight(parent[i], child[i]);
-		//					} else {
-		//						child[i] = parent[i];
-		//					}
-		//				}
-		//			}
-		//			return child;
-		//		},
-
-		extend : function(Child, Parent) {
-			Child.prototype = new Parent();
-			return Child;
-		},
-
-		// 汎用的イベントハンドラ
-		listenEvent : function(eventTarget, eventType, eventHandler) {
-			if (eventTarget.addEventListener) {
-				eventTarget.addEventListener(eventType, eventHandler, false);
-			} else if (eventTarget.attachEvent) {
-				eventType = "on" + eventType;
-				eventTarget.attachEvent(eventType, eventHandler);
-			} else {
-				eventTarget["on" + eventType] = eventHandler;
-			}
-		}
-	};
 
 	/**
 	 *  独自イベントハンドラ
@@ -393,6 +412,9 @@
 			},
 			model : function(Obj) {
 				return Animate.tools.extend(Obj, Animate.core.Model);
+			},
+			action : function(Obj) {
+				return Animate.tools.extend(Obj, Animate.core.Action);
 			}
 		};
 		return objects;
