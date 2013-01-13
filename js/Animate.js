@@ -72,37 +72,42 @@
 				element.setAttribute('class', 'view');
 				var that = this;
 				this.width = function(width) {
-					if ( typeof width === 'number') {
+					if (arguments.length === 1) {
 						element.width = width;
 						element.style.width = width + 'px';
+						return this;
 					}
 					return element.width;
 				};
 
 				this.height = function(height) {
-					if ( typeof height === 'number') {
+					if (arguments.length === 1) {
 						element.height = height;
 						element.style.height = height + 'px';
+						return this;
 					}
 					return element.height;
 				};
 
 				this.x = function(x) {
-					element.style.left = x + 'px';
+					if (arguments.length === 1) {
+						element.style.left = x + 'px';
+						return this;
+					}
+					return element.style.left;
 				};
 
 				this.y = function(y) {
-					element.style.top = y + 'px';
+					if (arguments.length === 1) {
+						element.style.top = y + 'px';
+						return this;
+					}
+					return element.style.top;
 				};
 
 				this.setTo = function(parent_element) {
 					parent_element.appendChild(element);
 					return this;
-				};
-
-				// elementに追加
-				this.append = function(elem) {
-					element.appendChild(elem);
 				};
 
 				// box(DIV)を作成
@@ -114,6 +119,11 @@
 					box.style.height = that.height() + 'px';
 					element.appendChild(box);
 					return box;
+				};
+
+				this.text = function(text) {
+					element.innerHTML = text;
+					return this;
 				};
 
 				// 表示させる
@@ -170,10 +180,13 @@
 				// 表示させる
 				this.display = function() {
 					element.style.display = 'block';
+					return this;
 				};
+
 				// 見えないようにする
 				this.hide = function() {
 					element.style.display = 'none';
+					return this;
 				};
 
 				// 正三角形の塗り
@@ -302,14 +315,22 @@
 				element.setAttribute('class', 'scene');
 				this.setTo = function(parent_element) {
 					parent_element.appendChild(element);
-				}
-				this.next = function() {
+				};
+				this.hasNext = function() {
 					if (currentAction === actionList.length) {
 						return false;
+					} else {
+						return true;
 					}
-					actionList[currentAction]();
-					currentAction += 1;
-					return true;
+				};
+				this.next = function() {
+					if (this.hasNext === false) {
+						return false;
+					} else {
+						actionList[currentAction]();
+						currentAction += 1;
+						return true;
+					}
 				};
 				this.prev = function() {
 					if (currentAction === 0) {
@@ -339,10 +360,19 @@
 				this.play = function() {
 
 				};
+				this.hasNext = function() {
+					if (currentScene === sceneList.length) {
+						return false;
+					} else {
+						return true;
+					}
+				};
 				this.next = function() {
-					if (sceneList[currentScene].next() == false) {
-
-						if (currentScene === sceneList.length) {
+					// alert(currentScene);
+					if (sceneList[currentScene].hasNext()) {
+						sceneList[currentScene].next();
+					} else {
+						if (this.hasNext === false) {
 							return false;
 						}
 						currentScene += 1;

@@ -21,17 +21,26 @@
 	 * Scene1
 	 */
 	var scene1 = world.addScene(function() {
-		// box view
+
 		var view1 = this.add($A.view(function() {
 			this.width(150);
-			this.height(150);
-			this.x(5);
-			this.y(5);
-			this.createBox();
+			this.y(0);
+			this.text('text1');
 		}), 'scene1_view1').hide();
 
-		// canvas view
-		this.add($A.canvas(function() {
+		var view2 = this.add($A.view(function() {
+			this.width(150);
+			this.y(60);
+			this.text('text2');
+		}), 'scene1_view2').hide();
+
+		var view3 = this.add($A.view(function() {
+			this.width(150);
+			this.y(120);
+			this.text('text3');
+		}), 'scene1_view3').hide();
+
+		var canvas1 = this.add($A.canvas(function() {
 			var width = this.width(150);
 			var height = this.height(150);
 			this.x(50);
@@ -41,12 +50,35 @@
 				color : '#cc6666',
 				lineWidth : 6
 			});
-			// this.draw(width, height);
-		}), 'scene1_canvas1');
+		}), 'scene1_canvas1').hide();
 
 		this.addAction($A.action(function() {
 			view1.display();
 		}));
+
+		this.addAction($A.action(function() {
+			view2.display();
+		}));
+
+		this.addAction($A.action(function() {
+			view3.display();
+		}));
+
+		this.addAction($A.action(function() {
+			canvas1.display();
+		}));
+
+		this.addAction($A.action(function() {
+			canvas1.x(0);
+			canvas1.y(0);
+			canvas1.width(500);
+			canvas1.height(500);
+		}));
+
+		this.addAction($A.action(function() {
+			canvas1.draw(500, 500);
+		}));
+
 	}, 'scene1');
 
 	/**
