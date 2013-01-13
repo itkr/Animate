@@ -1,4 +1,6 @@
 (function(global) {
+	// @TODO ViewとCanvasViewなどで共通するメソッドを統一
+
 	var document = global.document;
 	var Animate = {};
 
@@ -8,7 +10,29 @@
 	Animate.core = (function() {
 		var objects = {
 
-			View : function(element) {
+			View : function() {
+
+				var element = document.createElement('div');
+				var that = this;
+				this.width = function(width) {
+					if ( typeof width === 'number') {
+						element.width = width;
+						element.style.width = width + 'px';
+					}
+					return element.width;
+				};
+
+				this.height = function(height) {
+					if ( typeof height === 'number') {
+						element.height = height;
+						element.style.height = height + 'px';
+					}
+					return element.height;
+				};
+
+				this.setTo = function(parent_element) {
+					parent_element.appendChild(element);
+				};
 
 				// elementに追加
 				this.append = function(elem) {
@@ -19,7 +43,9 @@
 				this.createBox = function() {
 					var box = document.createElement('div');
 					box.innerHTML = 'hoge';
-					box.className = 'box'
+					box.className = 'box';
+					box.style.width = that.width() + 'px';
+					box.style.height = that.height() + 'px';
 					element.appendChild(box);
 					return box;
 				};
@@ -33,14 +59,34 @@
 				};
 			},
 
-			CanvasView : function(element) {
+			CanvasView : function() {
 				// 正三角形の内接円の半径
 				var INSCRIBED_CIRCLE = 0.298;
 				// 正三角形の外接円の半径
 				var CIRCUMCIRCLE = 0.577;
-				// かり
-				//var element = document.createElement('canvas');
+
+				var element = document.createElement('canvas');
 				var context = element.getContext('2d');
+
+				this.width = function(width) {
+					if ( typeof width === 'number') {
+						element.width = width;
+						element.style.width = width + 'px';
+					}
+					return element.width;
+				};
+
+				this.height = function(height) {
+					if ( typeof height === 'number') {
+						element.height = height;
+						element.style.height = height + 'px';
+					}
+					return element.height;
+				};
+
+				this.setTo = function(parent_element) {
+					parent_element.appendChild(element);
+				};
 
 				// 正三角形の塗り
 				this.drawFillTriangle = function(centerX, centerY, edge, color) {
@@ -164,6 +210,11 @@
 
 			Scene : function(element) {
 				var currentAction = 0, actionList = [];
+				var element = document.createElement('div');
+				element.setAttribute('class', 'scene');
+				this.setTo = function(parent_element) {
+					parent_element.appendChild(element);
+				}
 				this.next = function() {
 					if (currentAction === actionList.length) {
 						return false;
@@ -182,20 +233,17 @@
 
 				};
 				this.addView = function(Obj, name) {
-					var view_element = document.createElement('div');
-					Animate.tools.extend(Obj, Animate.core.View, view_element)
-					element.appendChild(view_element);
-					return new Obj();
+					Animate.tools.extend(Obj, Animate.core.View)
+					var obj = new Obj();
+					obj.setTo(element);
+					return obj;
 				};
-				this.addCanvas = function(Obj, name) {
+				this.addCanvas = function(Obj, name, width, height) {
 					// 仮
-					var width = 500, height = 500;
-					var canvas_view_element = document.createElement('canvas');
-					Animate.tools.extend(Obj, Animate.core.CanvasView, canvas_view_element)
-					element.appendChild(canvas_view_element);
-					canvas_view_element.width = width;
-					canvas_view_element.height = height;
-					return new Obj(width, height);
+					Animate.tools.extend(Obj, Animate.core.CanvasView)
+					var obj = new Obj(width, height);
+					obj.setTo(element);
+					return obj;
 				};
 				this.removeView = function() {
 
@@ -205,7 +253,7 @@
 				};
 			},
 
-			World : function(document) {
+			World : function(element) {
 				var currentScene = 0, sceneList = [];
 				this.play = function() {
 
@@ -225,12 +273,11 @@
 					return true;
 				};
 				this.addScene = function(Obj, name) {
-					var scene_element = document.createElement('div');
-					scene_element.setAttribute('class', 'scene');
-					Animate.tools.extend(Obj, Animate.core.Scene, scene_element)
-					document.getElementsByTagName('body')[0].appendChild(scene_element);
+					Animate.tools.extend(Obj, Animate.core.Scene)
 					sceneList.push(Obj);
-					return new Obj();
+					var obj = new Obj();
+					obj.setTo(element);
+					return obj;
 				};
 				this.removeScene = function() {
 
@@ -286,12 +333,8 @@
 		//			return child;
 		//		},
 
-		extend : function(Child, Parent, element) {
-			if (arguments.length == 3) {
-				Child.prototype = new Parent(element);
-			} else {
-				Child.prototype = new Parent();
-			};
+		extend : function(Child, Parent) {
+			Child.prototype = new Parent();
 			return Child;
 		},
 
@@ -328,14 +371,23 @@
 
 	Animate.fn = (function() {
 		var objects = {
-			init : function(document) {
-				return new Animate.core.World(document);
+			init : function(element) {
+				return new Animate.core.World(element);
+			},
+			view : function(obj) {
+
+			},
+			canvas : function(obj) {
+
+			},
+			model : function(obj) {
+
 			}
 		};
 		return objects;
 	})();
 
-	global.$A = Animate;
+	global.$A = Animate.fn;
 	global.Animate = Animate;
 
 })(this);
