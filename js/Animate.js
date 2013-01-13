@@ -374,14 +374,14 @@
 			init : function(element) {
 				return new Animate.core.World(element);
 			},
-			view : function(obj) {
-
+			view : function(Obj) {
+				return Animate.tools.extend(Obj, Animate.core.View);
 			},
-			canvas : function(obj) {
-
+			canvas : function(Obj) {
+				return Animate.tools.extend(Obj, Animate.core.CanvasView);
 			},
-			model : function(obj) {
-
+			model : function(Obj) {
+				return Animate.tools.extend(Obj, Animate.core.Model);
 			}
 		};
 		return objects;
