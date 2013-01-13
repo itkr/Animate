@@ -251,16 +251,8 @@
 				this.addAction = function() {
 
 				};
-				this.addView = function(Obj, name) {
-					Animate.tools.extend(Obj, Animate.core.View)
+				this.add = function(Obj, name) {
 					var obj = new Obj();
-					obj.setTo(element);
-					return obj;
-				};
-				this.addCanvas = function(Obj, name, width, height) {
-					// 仮
-					Animate.tools.extend(Obj, Animate.core.CanvasView)
-					var obj = new Obj(width, height);
 					obj.setTo(element);
 					return obj;
 				};

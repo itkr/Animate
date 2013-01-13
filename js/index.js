@@ -11,27 +11,41 @@
 	 */
 	var scene1 = world.addScene(function() {
 		// box view
-		this.addView(function() {
-			this.width(100);
-			this.height(100);
+		this.add($A.view(function() {
+			this.width(150);
+			this.height(150);
 			this.x(5);
 			this.y(5);
 			this.createBox();
-		}, 'scene1_view1');
+		}), 'scene1_view1');
 
 		// canvas view
-		this.addCanvas(function() {
-			var width = this.width(500);
-			var height = this.height(500);
-			this.x(15);
-			this.y(15);
+		this.add($A.canvas(function() {
+			var width = this.width(150);
+			var height = this.height(150);
+			this.x(50);
+			this.y(50);
 			this.drawFillTriangle(width / 2, height / 2, 60, '#3366ff');
 			this.drawStrokeTriangle(width / 2, height / 2, 60, {
 				color : '#cc6666',
 				lineWidth : 6
 			});
 			// this.draw(width, height);
-		}, 'scene1_canvas1');
+		}), 'scene1_canvas1');
 	}, 'scene1');
+
+	/**
+	 * Scene2
+	 */
+	var scene2 = world.addScene(function() {
+
+	}, 'scene2');
+
+	/**
+	 * Scene3
+	 */
+	var scene3 = world.addScene(function() {
+
+	}, 'scene3');
 
 })(window.document);

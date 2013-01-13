@@ -3,9 +3,8 @@ html, body, h1, h2, h3, h4, h5, a, b, s, u, i, span, div, p, ul, ol, li, dl, dt,
 	padding: 0;
 }
 body {
-	padding: 20px;
 	text-align: center;
-	background-color: #cccccc;
+	background-color: #aaaaaa;
 }
 canvas {
 	background-color: #ccccff;
@@ -21,10 +20,11 @@ canvas {
 	display: block;
 	width: 800px;
 	height: 600px;
-	margin: auto;
-	border: 3px solid #000000;
+	margin: 20px auto 20px auto;
 	text-align: center;
 	background-color: #ffffff;
+	-moz-box-shadow: 0 0 12px #666666, 7px 7px 7px #666666;
+	-webkit-box-shadow: 0 0 12px #666666, 7px 7px 7px #666666;
 }
 .view {
 	position: absolute;
