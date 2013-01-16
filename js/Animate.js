@@ -68,43 +68,42 @@
 
 			View : function() {
 				var that = this;
+				var defaultParams = {};
 				var element = document.createElement('div');
 				element.setAttribute('class', 'view');
 				this.element = element;
 
-				this.width = function(width) {
-					if (arguments.length === 1) {
-						this.element.width = width;
-						this.element.style.width = width + 'px';
-						return this;
-					}
+				this.__defineGetter__("width", function() {
 					return this.element.width;
-				};
+				});
+				this.__defineSetter__("width", function(width) {
+					this.element.width = width;
+					this.element.style.width = width + 'px';
+					return this;
+				});
+				this.__defineGetter__("height", function() {
+					return this.element.height;
 
-				this.height = function(height) {
-					if (arguments.length === 1) {
-						this.element.height = height;
-						this.element.style.height = height + 'px';
-						return this;
-					}
-					return element.height;
-				};
-
-				this.x = function(x) {
-					if (arguments.length === 1) {
-						this.element.style.left = x + 'px';
-						return this;
-					}
+				});
+				this.__defineSetter__("height", function(height) {
+					this.element.height = height;
+					this.element.style.height = height + 'px';
+					return this;
+				});
+				this.__defineGetter__("x", function() {
 					return this.element.style.left;
-				};
-
-				this.y = function(y) {
-					if (arguments.length === 1) {
-						this.element.style.top = y + 'px';
-						return this;
-					}
+				});
+				this.__defineSetter__("x", function(x) {
+					this.element.style.left = x + 'px';
+					return this;
+				});
+				this.__defineGetter__("y", function() {
 					return this.element.style.top;
-				};
+				});
+				this.__defineSetter__("y", function(y) {
+					this.element.style.top = y + 'px';
+					return this;
+				});
 
 				this.setTo = function(parent_element) {
 					parent_element.appendChild(this.element);
@@ -137,6 +136,14 @@
 				this.hide = function() {
 					this.element.style.display = 'none';
 					return this;
+				};
+
+				this.updateDefault = function() {
+
+				};
+
+				this.reset = function() {
+
 				};
 			},
 
@@ -368,10 +375,20 @@
 				this.play = function() {
 
 				};
+
+				this.reset = function() {
+
+				};
+			},
+
+			Base : function() {
+
 			}
 		};
-		// Viewを継承してCanvasViewをつくる
-		Animate.tools.extend(objects.CanvasView, objects.View)
+		Animate.tools.extend(objects.World, objects.Base);
+		Animate.tools.extend(objects.Scene, objects.Base);
+		Animate.tools.extend(objects.View, objects.Base);
+		Animate.tools.extend(objects.CanvasView, objects.View);
 		return objects;
 	})();
 
