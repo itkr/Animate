@@ -67,23 +67,24 @@
 		var objects = {
 
 			View : function() {
-
+				var that = this;
 				var element = document.createElement('div');
 				element.setAttribute('class', 'view');
-				var that = this;
+				this.element = element;
+
 				this.width = function(width) {
 					if (arguments.length === 1) {
-						element.width = width;
-						element.style.width = width + 'px';
+						this.element.width = width;
+						this.element.style.width = width + 'px';
 						return this;
 					}
-					return element.width;
+					return this.element.width;
 				};
 
 				this.height = function(height) {
 					if (arguments.length === 1) {
-						element.height = height;
-						element.style.height = height + 'px';
+						this.element.height = height;
+						this.element.style.height = height + 'px';
 						return this;
 					}
 					return element.height;
@@ -91,22 +92,22 @@
 
 				this.x = function(x) {
 					if (arguments.length === 1) {
-						element.style.left = x + 'px';
+						this.element.style.left = x + 'px';
 						return this;
 					}
-					return element.style.left;
+					return this.element.style.left;
 				};
 
 				this.y = function(y) {
 					if (arguments.length === 1) {
-						element.style.top = y + 'px';
+						this.element.style.top = y + 'px';
 						return this;
 					}
-					return element.style.top;
+					return this.element.style.top;
 				};
 
 				this.setTo = function(parent_element) {
-					parent_element.appendChild(element);
+					parent_element.appendChild(this.element);
 					return this;
 				};
 
@@ -122,19 +123,19 @@
 				};
 
 				this.text = function(text) {
-					element.innerHTML = text;
+					this.element.innerHTML = text;
 					return this;
 				};
 
 				// 表示させる
 				this.display = function() {
-					element.style.display = 'block';
+					this.element.style.display = 'block';
 					return this;
 				};
 
 				// 見えないようにする
 				this.hide = function() {
-					element.style.display = 'none';
+					this.element.style.display = 'none';
 					return this;
 				};
 			},
@@ -145,49 +146,12 @@
 				// 正三角形の外接円の半径
 				var CIRCUMCIRCLE = 0.577;
 
+				var that = this;
 				var element = document.createElement('canvas');
 				var context = element.getContext('2d');
-				var that = this;
+				this.element = element;
 
 				element.setAttribute('class', 'canvasView');
-				this.width = function(width) {
-					if ( typeof width === 'number') {
-						element.width = width;
-						element.style.width = width + 'px';
-					}
-					return element.width;
-				};
-
-				this.height = function(height) {
-					if ( typeof height === 'number') {
-						element.height = height;
-						element.style.height = height + 'px';
-					}
-					return element.height;
-				};
-
-				this.x = function(x) {
-					element.style.left = x + 'px';
-				};
-
-				this.y = function(y) {
-					element.style.top = y + 'px';
-				};
-
-				this.setTo = function(parent_element) {
-					parent_element.appendChild(element);
-				};
-				// 表示させる
-				this.display = function() {
-					element.style.display = 'block';
-					return this;
-				};
-
-				// 見えないようにする
-				this.hide = function() {
-					element.style.display = 'none';
-					return this;
-				};
 
 				// 正三角形の塗り
 				this.drawFillTriangle = function(centerX, centerY, edge, color) {
@@ -296,7 +260,7 @@
 
 			},
 
-			Canvas : function(element) {
+			Sprite : function(element) {
 				var objects = {
 					Point : function(x, y) {
 						this.x = x;
@@ -309,7 +273,7 @@
 				return objects;
 			},
 
-			Scene : function(element) {
+			Scene : function() {
 				var currentAction = 0, actionList = [];
 				var element = document.createElement('div');
 				element.setAttribute('class', 'scene');
@@ -407,7 +371,7 @@
 			}
 		};
 		// Viewを継承してCanvasViewをつくる
-		// Animate.tools.extend(objects.CanvasView, objects.View)
+		Animate.tools.extend(objects.CanvasView, objects.View)
 		return objects;
 	})();
 
