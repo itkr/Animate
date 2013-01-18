@@ -26,19 +26,22 @@
 			this.width = 150;
 			this.y = 0;
 			this.text('text1');
-		}), 'scene1_view1').hide();
+			this.hide();
+		}), 'scene1_view1');
 
 		var view2 = this.add($A.view(function() {
 			this.width = 150;
 			this.y = 60;
 			this.text('text2');
-		}), 'scene1_view2').hide();
+			this.hide();
+		}), 'scene1_view2');
 
 		var view3 = this.add($A.view(function() {
 			this.width = 150;
 			this.y = 120;
 			this.text('text3');
-		}), 'scene1_view3').hide();
+			this.hide();
+		}), 'scene1_view3');
 
 		var canvas1 = this.add($A.canvas(function() {
 			this.width = 150;
@@ -50,22 +53,23 @@
 				color : '#cc6666',
 				lineWidth : 6
 			});
-		}), 'scene1_canvas1').hide();
+			this.hide();
+		}), 'scene1_canvas1');
 
 		this.addAction($A.action(function() {
-			view1.display();
+			view1.show();
 		}));
 
 		this.addAction($A.action(function() {
-			view2.display();
+			view2.show();
 		}));
 
 		this.addAction($A.action(function() {
-			view3.display();
+			view3.show();
 		}));
 
 		this.addAction($A.action(function() {
-			canvas1.display();
+			canvas1.show();
 		}));
 
 		this.addAction($A.action(function() {
@@ -77,6 +81,9 @@
 
 		this.addAction($A.action(function() {
 			canvas1.draw(500, 500);
+		}));
+		this.addAction($A.action(function() {
+			canvas1.reset();
 		}));
 
 	}, 'scene1');

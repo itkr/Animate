@@ -74,7 +74,7 @@
 				this.element = element;
 
 				this.__defineGetter__("width", function() {
-					return this.element.width;
+					return parseInt(this.element.style.width.replace("px", ""), 10);
 				});
 				this.__defineSetter__("width", function(width) {
 					this.element.width = width;
@@ -82,7 +82,7 @@
 					return this;
 				});
 				this.__defineGetter__("height", function() {
-					return this.element.height;
+					return parseInt(this.element.style.height.replace("px", ""), 10);
 
 				});
 				this.__defineSetter__("height", function(height) {
@@ -91,14 +91,14 @@
 					return this;
 				});
 				this.__defineGetter__("x", function() {
-					return this.element.style.left;
+					return parseInt(this.element.style.left.replace("px", ""), 10);
 				});
 				this.__defineSetter__("x", function(x) {
 					this.element.style.left = x + 'px';
 					return this;
 				});
 				this.__defineGetter__("y", function() {
-					return this.element.style.top;
+					return parseInt(this.element.style.top.replace("px", ""), 10);
 				});
 				this.__defineSetter__("y", function(y) {
 					this.element.style.top = y + 'px';
@@ -127,7 +127,7 @@
 				};
 
 				// 表示させる
-				this.display = function() {
+				this.show = function() {
 					this.element.style.display = 'block';
 					return this;
 				};
@@ -138,12 +138,25 @@
 					return this;
 				};
 
-				this.updateDefault = function() {
-
+				this.updateDefaultParams = function(params) {
+					if ( typeof params.x !== 'undefined')
+						defaultParams.x = params.x;
+					if ( typeof params.y !== 'undefined')
+						defaultParams.y = params.y;
+					if ( typeof params.width !== 'undefined')
+						defaultParams.width = params.width;
+					if ( typeof params.height !== 'undefined')
+						defaultParams.height = params.height;
+					if ( typeof params.display !== 'undefined')
+						defaultParams.display = params.display;
 				};
 
 				this.reset = function() {
-
+					this.x = defaultParams.x;
+					this.y = defaultParams.y;
+					this.width = defaultParams.width;
+					this.height = defaultParams.height;
+					this.element.style.display = defaultParams.display;
 				};
 			},
 
@@ -281,7 +294,7 @@
 			},
 
 			Scene : function() {
-				var currentAction = 0, actionList = [];
+				var currentAction = 0, actionList = [], that = this;
 				var element = document.createElement('div');
 				element.setAttribute('class', 'scene');
 				this.setTo = function(parent_element) {
@@ -316,6 +329,16 @@
 				this.add = function(Obj, name) {
 					var obj = new Obj();
 					obj.setTo(element);
+					if (obj.element.style.display === '') {
+						obj.element.style.display = 'block'
+					}
+					obj.updateDefaultParams({
+						'x' : obj.x,
+						'y' : obj.y,
+						'width' : obj.width,
+						'height' : obj.height,
+						'display' : obj.element.style.display
+					});
 					return obj;
 				};
 				this.removeView = function() {
@@ -339,7 +362,6 @@
 					}
 				};
 				this.next = function() {
-					// alert(currentScene);
 					if (sceneList[currentScene].hasNext()) {
 						sceneList[currentScene].next();
 					} else {
