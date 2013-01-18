@@ -308,12 +308,12 @@
 					}
 				};
 				this.next = function() {
-					if (this.hasNext === false) {
-						return false;
-					} else {
-						actionList[currentAction]();
+					if (this.hasNext()) {
+						actionList[currentAction].play();
 						currentAction += 1;
 						return true;
+					} else {
+						return false;
 					}
 				};
 				this.prev = function() {
@@ -323,8 +323,8 @@
 					currentAction -= 1;
 					return true;
 				};
-				this.addAction = function(action) {
-					actionList.push(action);
+				this.addAction = function(obj) {
+					actionList.push(obj);
 				};
 				this.add = function(Obj, name) {
 					var obj = new Obj();
@@ -365,11 +365,12 @@
 					if (sceneList[currentScene].hasNext()) {
 						sceneList[currentScene].next();
 					} else {
-						if (this.hasNext === false) {
+						if (this.hasNext()) {
+							currentScene += 1;
+							return true;
+						} else {
 							return false;
 						}
-						currentScene += 1;
-						return true;
 					};
 				};
 				this.prev = function() {
@@ -393,9 +394,8 @@
 			},
 
 			Action : function() {
-				// Tweenerっぽくしたい
 				this.play = function() {
-
+					this.action();
 				};
 
 				this.reset = function() {
@@ -446,8 +446,12 @@
 			model : function(Obj) {
 				return Animate.tools.extend(Obj, Animate.core.Model);
 			},
-			action : function(Obj) {
-				return Animate.tools.extend(Obj, Animate.core.Action);
+			action : function(action) {
+				var Obj = function(){
+					this.action = action;
+				};
+				Animate.tools.extend(Obj, Animate.core.Action);
+				return new Obj();
 			}
 		};
 		return objects;
