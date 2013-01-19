@@ -9,39 +9,6 @@
 	 */
 	Animate.tools = {
 
-		//継承実装1
-		update : function(dest, sources) {
-			for (var property in sources) {
-				dest[property] = sources[property];
-			}
-			return dest;
-		},
-
-		// 継承実装2
-		//		extend : function(child, parent) {
-		//			var extendLight = function(p, c) {
-		//				var j;
-		//				for (j in p) {
-		//					if (p.hasOwnProperty(j)) {
-		//						c[j] == p[j];
-		//					}
-		//				}
-		//				return c;
-		//			};
-		//			var i = 0, toStr = Object.prototype.toString, astr = "[object Array]";
-		//			for (i in parent) {
-		//				if (parent.hasOwnProperty(i)) {
-		//					if ( typeof parent[i] === "object") {
-		//						child[i] = (toStr.call(parent[i]) === astr) ? [] : {};
-		//						extendLight(parent[i], child[i]);
-		//					} else {
-		//						child[i] = parent[i];
-		//					}
-		//				}
-		//			}
-		//			return child;
-		//		},
-
 		extend : function(Child, Parent) {
 			Child.prototype = new Parent();
 			return Child;
@@ -68,7 +35,8 @@
 
 			View : function() {
 				var that = this;
-				var defaultParams = {};
+				var history = [];
+				var currentHistory = 0;
 				var element = document.createElement('div');
 				element.setAttribute('class', 'view');
 				this.element = element;
@@ -79,46 +47,40 @@
 				this.__defineSetter__("width", function(width) {
 					this.element.width = width;
 					this.element.style.width = width + 'px';
-					return this;
 				});
 				this.__defineGetter__("height", function() {
 					return parseInt(this.element.style.height.replace("px", ""), 10);
-
 				});
 				this.__defineSetter__("height", function(height) {
 					this.element.height = height;
 					this.element.style.height = height + 'px';
-					return this;
 				});
 				this.__defineGetter__("x", function() {
 					return parseInt(this.element.style.left.replace("px", ""), 10);
 				});
 				this.__defineSetter__("x", function(x) {
 					this.element.style.left = x + 'px';
-					return this;
 				});
 				this.__defineGetter__("y", function() {
 					return parseInt(this.element.style.top.replace("px", ""), 10);
 				});
 				this.__defineSetter__("y", function(y) {
 					this.element.style.top = y + 'px';
-					return this;
+				});
+				this.__defineGetter__("display", function() {
+					return this.element.style.display === "block";
+				});
+				this.__defineSetter__("display", function(display) {
+					if (display) {
+						this.element.style.display = "block";
+					} else {
+						this.element.style.display = "none";
+					}
 				});
 
 				this.setTo = function(parent_element) {
 					parent_element.appendChild(this.element);
 					return this;
-				};
-
-				// box(DIV)を作成
-				this.createBox = function() {
-					var box = document.createElement('div');
-					box.innerHTML = 'hoge';
-					box.className = 'box';
-					box.style.width = that.width() + 'px';
-					box.style.height = that.height() + 'px';
-					element.appendChild(box);
-					return box;
 				};
 
 				this.text = function(text) {
@@ -128,35 +90,84 @@
 
 				// 表示させる
 				this.show = function() {
-					this.element.style.display = 'block';
+					this.display = true;
 					return this;
 				};
 
 				// 見えないようにする
 				this.hide = function() {
-					this.element.style.display = 'none';
+					this.display = false;
 					return this;
 				};
 
-				this.updateDefaultParams = function(params) {
-					if ( typeof params.x !== 'undefined')
-						defaultParams.x = params.x;
-					if ( typeof params.y !== 'undefined')
-						defaultParams.y = params.y;
-					if ( typeof params.width !== 'undefined')
-						defaultParams.width = params.width;
-					if ( typeof params.height !== 'undefined')
-						defaultParams.height = params.height;
-					if ( typeof params.display !== 'undefined')
-						defaultParams.display = params.display;
+				this.hasNext = function() {
+					if (currentHistory + 1 === histry.length) {
+						return false;
+					}
+					return true;
+				}
+
+				this.updateHistory = function(params) {
+					var fixParams = {};
+					// javascriptに三項演算子ってあるんだっけ？
+					if ( typeof params.x !== 'undefined') {
+						fixParams.x = params.x;
+					} else {
+						fixParams.x = this.x;
+					}
+					if ( typeof params.y !== 'undefined') {
+						fixParams.y = params.y;
+					} else {
+						fixParams.y = this.y;
+					}
+					if ( typeof params.width !== 'undefined') {
+						fixParams.width = params.width;
+					} else {
+						fixParams.width = this.width;
+					}
+					if ( typeof params.height !== 'undefined') {
+						fixParams.height = params.height;
+					} else {
+						fixParams.height = this.height
+					}
+					if ( typeof params.display !== 'undefined') {
+						fixParams.display = params.display;
+					} else {
+						fixParams.display = this.display;
+					}
+					history.push(fixParams);
+					// TODO ここで更新しない法外以下も
+					currentHistory += 1;
+				};
+
+				// this.next = function() {
+				// if (this.hasNext()) {
+				// currentHistory += 1;
+				// openParams(history[currentParams]);
+				// } else {
+				// return false;
+				// }
+				// };
+
+				this.prev = function() {
+					if (currentHistory === 0) {
+						return false;
+					}
+					currentHistory -= 1;
+					this.x = history[currentHistory].x;
+					this.y = history[currentHistory].y;
+					this.width = history[currentHistory].width;
+					this.height = history[currentHistory].height;
+					this.display = history[currentHistory].display;
 				};
 
 				this.reset = function() {
-					this.x = defaultParams.x;
-					this.y = defaultParams.y;
-					this.width = defaultParams.width;
-					this.height = defaultParams.height;
-					this.element.style.display = defaultParams.display;
+					this.x = history[0].x;
+					this.y = history[0].y;
+					this.width = history[0].width;
+					this.height = history[0].height;
+					this.display = history[0].display;
+					currntHistory = 0;
 				};
 			},
 
@@ -294,7 +305,10 @@
 			},
 
 			Scene : function() {
-				var currentAction = 0, actionList = [], that = this;
+				var currentAction = 0;
+				var actionList = [];
+				var viewList = [];
+				var that = this;
 				var element = document.createElement('div');
 				element.setAttribute('class', 'scene');
 				this.setTo = function(parent_element) {
@@ -328,23 +342,22 @@
 				};
 				this.add = function(Obj, name) {
 					var obj = new Obj();
-					obj.setTo(element);
 					if (obj.element.style.display === '') {
-						obj.element.style.display = 'block'
+						obj.display = true;
 					}
-					obj.updateDefaultParams({
+					var defaultParams = {
 						'x' : obj.x,
 						'y' : obj.y,
 						'width' : obj.width,
 						'height' : obj.height,
-						'display' : obj.element.style.display
-					});
+						'display' : obj.display
+					};
+					obj.setTo(element);
+					obj.updateHistory(defaultParams);
+					viewList.push(obj);
 					return obj;
 				};
-				this.removeView = function() {
-
-				};
-				this.removeCanvas = function() {
+				this.remove = function() {
 
 				};
 			},
@@ -447,7 +460,7 @@
 				return Animate.tools.extend(Obj, Animate.core.Model);
 			},
 			action : function(action) {
-				var Obj = function(){
+				var Obj = function() {
 					this.action = action;
 				};
 				Animate.tools.extend(Obj, Animate.core.Action);

@@ -83,7 +83,7 @@
 			canvas1.draw(500, 500);
 		}));
 		this.addAction($A.action(function() {
-			canvas1.reset();
+			canvas1.prev();
 		}));
 
 	}, 'scene1');
