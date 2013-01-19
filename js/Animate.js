@@ -107,40 +107,19 @@
 					return true;
 				}
 
-				this.snapShot = function(params) {
+				this.fixSnapShot = function(params) {
 					var fixParams = {};
-					// javascriptに三項演算子ってあるんだっけ？
-					if ( typeof params.x !== 'undefined') {
-						fixParams.x = params.x;
-					} else {
-						fixParams.x = this.x;
-					}
-					if ( typeof params.y !== 'undefined') {
-						fixParams.y = params.y;
-					} else {
-						fixParams.y = this.y;
-					}
-					if ( typeof params.width !== 'undefined') {
-						fixParams.width = params.width;
-					} else {
-						fixParams.width = this.width;
-					}
-					if ( typeof params.height !== 'undefined') {
-						fixParams.height = params.height;
-					} else {
-						fixParams.height = this.height
-					}
-					if ( typeof params.display !== 'undefined') {
-						fixParams.display = params.display;
-					} else {
-						fixParams.display = this.display;
-					}
+					fixParams.x = ( typeof params.x !== 'undefined') ? params.x : this.x;
+					fixParams.y = ( typeof params.y !== 'undefined') ? params.y : this.y;
+					fixParams.width = ( typeof params.width !== 'undefined') ? params.width : this.width;
+					fixParams.height = ( typeof params.height !== 'undefined') ? params.height : this.height;
+					fixParams.display = ( typeof params.display !== 'undefined') ? params.display : this.display;
 					return fixParams;
 				};
 
 				this.next = function() {
 					if (currentHistory === history.length) {
-						history.push(this.snapShot({}));
+						history.push(this.fixSnapShot({}));
 					}
 					currentHistory += 1;
 				};
