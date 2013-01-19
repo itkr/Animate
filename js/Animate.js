@@ -107,7 +107,7 @@
 					return true;
 				}
 
-				this.updateHistory = function(params) {
+				this.snapShot = function(params) {
 					var fixParams = {};
 					// javascriptに三項演算子ってあるんだっけ？
 					if ( typeof params.x !== 'undefined') {
@@ -135,19 +135,15 @@
 					} else {
 						fixParams.display = this.display;
 					}
-					history.push(fixParams);
-					// TODO ここで更新しない法外以下も
-					currentHistory += 1;
+					return fixParams;
 				};
 
-				// this.next = function() {
-				// if (this.hasNext()) {
-				// currentHistory += 1;
-				// openParams(history[currentParams]);
-				// } else {
-				// return false;
-				// }
-				// };
+				this.next = function() {
+					if (currentHistory === history.length) {
+						history.push(this.snapShot({}));
+					}
+					currentHistory += 1;
+				};
 
 				this.prev = function() {
 					if (currentHistory === 0) {
@@ -314,11 +310,11 @@
 				this.setTo = function(parent_element) {
 					parent_element.appendChild(element);
 				};
-				
+
 				//TODO これをするとどんどんHistoryが更新されてしまう！！要修正
 				this.saveViewsParams = function() {
 					for (var i = 0; i < viewList.length; i++) {
-						viewList[i].updateHistory({});
+						viewList[i].next();
 					}
 				}
 				this.hasNext = function() {
@@ -330,6 +326,7 @@
 				};
 				this.next = function() {
 					if (this.hasNext()) {
+						this.saveViewsParams();
 						actionList[currentAction].play();
 						currentAction += 1;
 						return true;
@@ -350,20 +347,12 @@
 				this.addAction = function(obj) {
 					actionList.push(obj);
 				};
-				this.add = function(Obj, name) {
+				this.add = function(Obj) {
 					var obj = new Obj();
 					if (obj.element.style.display === '') {
 						obj.display = true;
 					}
-					var defaultParams = {
-						'x' : obj.x,
-						'y' : obj.y,
-						'width' : obj.width,
-						'height' : obj.height,
-						'display' : obj.display
-					};
 					obj.setTo(element);
-					obj.updateHistory(defaultParams);
 					viewList.push(obj);
 					return obj;
 				};
@@ -406,7 +395,7 @@
 					}
 					return false;
 				};
-				this.addScene = function(Obj, name) {
+				this.addScene = function(Obj) {
 					Animate.tools.extend(Obj, Animate.core.Scene)
 					var obj = new Obj();
 					sceneList.push(obj);
@@ -421,7 +410,6 @@
 
 			Action : function() {
 				this.play = function() {
-					this.scene.saveViewsParams();
 					this.action();
 				};
 
@@ -473,10 +461,9 @@
 			model : function(Obj) {
 				return Animate.tools.extend(Obj, Animate.core.Model);
 			},
-			action : function(action, scene) {
+			action : function(action) {
 				var Obj = function() {
 					this.action = action;
-					this.scene = scene;
 				};
 				Animate.tools.extend(Obj, Animate.core.Action);
 				return new Obj();

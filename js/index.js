@@ -35,21 +35,21 @@
 			this.y = 0;
 			this.text('text1');
 			this.hide();
-		}), 'scene1_view1');
+		}));
 
 		var view2 = this.add($A.view(function() {
 			this.width = 150;
 			this.y = 60;
 			this.text('text2');
 			this.hide();
-		}), 'scene1_view2');
+		}));
 
 		var view3 = this.add($A.view(function() {
 			this.width = 150;
 			this.y = 120;
 			this.text('text3');
 			this.hide();
-		}), 'scene1_view3');
+		}));
 
 		var canvas1 = this.add($A.canvas(function() {
 			this.width = 150;
@@ -62,49 +62,49 @@
 				lineWidth : 6
 			});
 			this.hide();
-		}), 'scene1_canvas1');
+		}));
 
 		this.addAction($A.action(function() {
 			view1.show();
-		}, this));
+		}));
 
 		this.addAction($A.action(function() {
 			view2.show();
-		}, this));
+		}));
 
 		this.addAction($A.action(function() {
 			view3.show();
-		}, this));
+		}));
 
 		this.addAction($A.action(function() {
 			canvas1.show();
-		}, this));
+		}));
 
 		this.addAction($A.action(function() {
 			canvas1.x = 0;
 			canvas1.y = 0;
 			canvas1.width = 500;
 			canvas1.height = 500;
-		}, this));
+		}));
 
 		this.addAction($A.action(function() {
 			canvas1.draw(500, 500);
-		}, this));
+		}));
 
-	}, 'scene1');
+	});
 
 	/**
 	 * Scene2
 	 */
 	var scene2 = world.addScene(function() {
 
-	}, 'scene2');
+	});
 
 	/**
 	 * Scene3
 	 */
 	var scene3 = world.addScene(function() {
 
-	}, 'scene3');
+	});
 
 })(window.document);
