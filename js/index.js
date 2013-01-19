@@ -8,13 +8,21 @@
 
 	// ---- デバッグ用 ----
 	var next_a = document.createElement('a');
-	var next_text = document.createTextNode('next');
+	var next_text = document.createTextNode('next ');
 	next_a.setAttribute('href', 'javascript:void(0)');
 	next_a.onclick = function() {
-		world.next()
+		world.next();
 	};
 	next_a.appendChild(next_text);
 	body.appendChild(next_a);
+	var prev_a = document.createElement('a');
+	var prev_text = document.createTextNode(' prev');
+	prev_a.setAttribute('href', 'javascript:void(0)');
+	prev_a.onclick = function() {
+		world.prev();
+	};
+	prev_a.appendChild(prev_text);
+	body.appendChild(prev_a);
 	// ---- デバッグ用 ----
 
 	/**
@@ -58,33 +66,30 @@
 
 		this.addAction($A.action(function() {
 			view1.show();
-		}));
+		}, this));
 
 		this.addAction($A.action(function() {
 			view2.show();
-		}));
+		}, this));
 
 		this.addAction($A.action(function() {
 			view3.show();
-		}));
+		}, this));
 
 		this.addAction($A.action(function() {
 			canvas1.show();
-		}));
+		}, this));
 
 		this.addAction($A.action(function() {
 			canvas1.x = 0;
 			canvas1.y = 0;
 			canvas1.width = 500;
 			canvas1.height = 500;
-		}));
+		}, this));
 
 		this.addAction($A.action(function() {
 			canvas1.draw(500, 500);
-		}));
-		this.addAction($A.action(function() {
-			canvas1.prev();
-		}));
+		}, this));
 
 	}, 'scene1');
 

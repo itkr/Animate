@@ -314,6 +314,13 @@
 				this.setTo = function(parent_element) {
 					parent_element.appendChild(element);
 				};
+				
+				//TODO これをするとどんどんHistoryが更新されてしまう！！要修正
+				this.saveViewsParams = function() {
+					for (var i = 0; i < viewList.length; i++) {
+						viewList[i].updateHistory({});
+					}
+				}
 				this.hasNext = function() {
 					if (currentAction === actionList.length) {
 						return false;
@@ -333,6 +340,9 @@
 				this.prev = function() {
 					if (currentAction === 0) {
 						return false;
+					}
+					for (var i = 0; i < viewList.length; i++) {
+						viewList[i].prev();
 					}
 					currentAction -= 1;
 					return true;
@@ -387,11 +397,14 @@
 					};
 				};
 				this.prev = function() {
-					if (currentScene === 0) {
-						return false;
+					if (sceneList[currentScene].prev() === false) {
+						if (currentScene === 0) {
+							return false;
+						}
+						currentScene -= 1;
+						return true;
 					}
-					currentScene -= 1;
-					return true;
+					return false;
 				};
 				this.addScene = function(Obj, name) {
 					Animate.tools.extend(Obj, Animate.core.Scene)
@@ -408,6 +421,7 @@
 
 			Action : function() {
 				this.play = function() {
+					this.scene.saveViewsParams();
 					this.action();
 				};
 
@@ -459,9 +473,10 @@
 			model : function(Obj) {
 				return Animate.tools.extend(Obj, Animate.core.Model);
 			},
-			action : function(action) {
+			action : function(action, scene) {
 				var Obj = function() {
 					this.action = action;
+					this.scene = scene;
 				};
 				Animate.tools.extend(Obj, Animate.core.Action);
 				return new Obj();
