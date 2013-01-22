@@ -86,10 +86,10 @@
 			canvas1.width = 500;
 			canvas1.height = 500;
 		}));
-
-		this.addAction($A.action(function() {
-			canvas1.draw(500, 500);
-		}));
+// 
+		// this.addAction($A.action(function() {
+			// canvas1.draw(500, 500);
+		// }));
 
 	});
 

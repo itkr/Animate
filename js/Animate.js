@@ -1,5 +1,4 @@
 (function(global) {
-	// @TODO ViewとCanvasViewなどで共通するメソッドを統一
 
 	var document = global.document;
 	var Animate = {};
@@ -101,7 +100,7 @@
 				};
 
 				this.hasNext = function() {
-					if (currentHistory + 1 === histry.length) {
+					if (currentHistory >= histry.length - 1) {
 						return false;
 					}
 					return true;
@@ -290,23 +289,31 @@
 					parent_element.appendChild(element);
 				};
 
-				//TODO これをするとどんどんHistoryが更新されてしまう！！要修正
 				this.saveViewsParams = function() {
 					for (var i = 0; i < viewList.length; i++) {
 						viewList[i].next();
 					}
-				}
+				};
+
 				this.hasNext = function() {
-					if (currentAction === actionList.length) {
+					console.log(currentAction + ',' + actionList.length)
+					if (currentAction >= actionList.length - 1) {
+						console.log('hasnext:false')
 						return false;
 					} else {
+						console.log('hasnext:true')
 						return true;
 					}
 				};
 				this.next = function() {
-					if (this.hasNext()) {
-						this.saveViewsParams();
+					// TODO next,hasnextの概念整理
+					if (actionList.length !== 0) {
+						if (this.hasNext()) {
+							this.saveViewsParams();
+						}
 						actionList[currentAction].play();
+					}
+					if (this.hasNext()) {
 						currentAction += 1;
 						return true;
 					} else {
@@ -346,16 +353,15 @@
 
 				};
 				this.hasNext = function() {
-					if (currentScene === sceneList.length) {
+					if (currentScene >= sceneList.length - 1) {
 						return false;
 					} else {
 						return true;
 					}
 				};
 				this.next = function() {
-					if (sceneList[currentScene].hasNext()) {
-						sceneList[currentScene].next();
-					} else {
+					var hasNext = sceneList[currentScene].next();
+					if (!hasNext) {
 						if (this.hasNext()) {
 							currentScene += 1;
 							return true;
