@@ -86,9 +86,9 @@
 			canvas1.width = 500;
 			canvas1.height = 500;
 		}));
-// 
+		//
 		// this.addAction($A.action(function() {
-			// canvas1.draw(500, 500);
+		// canvas1.draw(500, 500);
 		// }));
 
 	});
@@ -97,7 +97,11 @@
 	 * Scene2
 	 */
 	var scene2 = world.addScene(function() {
-
+		this.add($A.view(function() {
+			this.width = 150;
+			this.y = 0;
+			this.text('Scene2');
+		}));
 	});
 
 	/**

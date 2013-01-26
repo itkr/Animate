@@ -282,21 +282,29 @@
 				var currentAction = 0;
 				var actionList = [];
 				var viewList = [];
+				var active = false;
 				var that = this;
 				var element = document.createElement('div');
 				element.setAttribute('class', 'scene');
+
 				this.setTo = function(parent_element) {
 					parent_element.appendChild(element);
 				};
 
-				this.saveViewsParams = function() {
+				var saveViewsParams = function() {
 					for (var i = 0; i < viewList.length; i++) {
 						viewList[i].next();
 					}
 				};
 
+				var playCurrentAction = function() {
+					if (actionList.length !== 0) {
+						saveViewsParams();
+						actionList[currentAction].play();
+					}
+				};
+
 				this.hasNext = function() {
-					console.log(currentAction + ',' + actionList.length)
 					if (currentAction >= actionList.length - 1) {
 						console.log('hasnext:false')
 						return false;
@@ -306,13 +314,8 @@
 					}
 				};
 				this.next = function() {
-					// TODO next,hasnextの概念整理
-					if (actionList.length !== 0) {
-						if (this.hasNext()) {
-							this.saveViewsParams();
-						}
-						actionList[currentAction].play();
-					}
+					console.log(currentAction + ',' + actionList.length)
+					playCurrentAction();
 					if (this.hasNext()) {
 						currentAction += 1;
 						return true;
@@ -321,6 +324,7 @@
 					}
 				};
 				this.prev = function() {
+					console.log(currentAction + ',' + actionList.length)
 					if (currentAction === 0) {
 						return false;
 					}
@@ -345,6 +349,30 @@
 				this.remove = function() {
 
 				};
+				
+				this.isActive = function(){
+					return active;
+				};
+				
+				this.activation = function(){
+					active = true;
+					this.show();
+				};
+				
+				this.deactivation = function(){
+					active = true;
+					this.hide();
+				};
+
+				this.show = function() {
+					element.style.display = 'block';
+					return this;
+				};
+
+				this.hide = function() {
+					element.style.display = 'none';
+					return this;
+				};
 			},
 
 			World : function(element) {
@@ -360,10 +388,12 @@
 					}
 				};
 				this.next = function() {
-					var hasNext = sceneList[currentScene].next();
-					if (!hasNext) {
+					var sceneHasNext = sceneList[currentScene].next();
+					if (!sceneHasNext) {
 						if (this.hasNext()) {
+							sceneList[currentScene].deactivation();
 							currentScene += 1;
+							sceneList[currentScene].activation();
 							return true;
 						} else {
 							return false;
@@ -383,6 +413,9 @@
 				this.addScene = function(Obj) {
 					Animate.tools.extend(Obj, Animate.core.Scene)
 					var obj = new Obj();
+					if(sceneList.length !== 0){
+						obj.hide();
+					}
 					sceneList.push(obj);
 					obj.setTo(element);
 					return obj;
