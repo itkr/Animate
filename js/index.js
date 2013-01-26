@@ -108,7 +108,11 @@
 	 * Scene3
 	 */
 	var scene3 = world.addScene(function() {
-
+		this.add($A.view(function() {
+			this.width = 150;
+			this.y = 0;
+			this.text('Scene3');
+		}));
 	});
 
 })(window.document);

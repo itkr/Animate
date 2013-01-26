@@ -349,17 +349,17 @@
 				this.remove = function() {
 
 				};
-				
-				this.isActive = function(){
+
+				this.isActive = function() {
 					return active;
 				};
-				
-				this.activation = function(){
+
+				this.activation = function() {
 					active = true;
 					this.show();
 				};
-				
-				this.deactivation = function(){
+
+				this.deactivation = function() {
 					active = true;
 					this.hide();
 				};
@@ -405,7 +405,9 @@
 						if (currentScene === 0) {
 							return false;
 						}
+						sceneList[currentScene].deactivation();
 						currentScene -= 1;
+						sceneList[currentScene].activation();
 						return true;
 					}
 					return false;
@@ -413,7 +415,7 @@
 				this.addScene = function(Obj) {
 					Animate.tools.extend(Obj, Animate.core.Scene)
 					var obj = new Obj();
-					if(sceneList.length !== 0){
+					if (sceneList.length !== 0) {
 						obj.hide();
 					}
 					sceneList.push(obj);
