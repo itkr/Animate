@@ -146,11 +146,8 @@
 			},
 
 			CanvasView : function() {
-				// 正三角形の内接円の半径
 				var INSCRIBED_CIRCLE = 0.298;
-				// 正三角形の外接円の半径
 				var CIRCUMCIRCLE = 0.577;
-
 				var that = this;
 				var element = document.createElement('canvas');
 				var context = element.getContext('2d');
@@ -256,7 +253,6 @@
 					setInterval(f, 10);
 				};
 
-				// キャンバス内消す
 				this.clear = function() {
 					context.beginPath();
 					context.clearRect(0, 0, element.width, element.height);
@@ -377,9 +373,12 @@
 
 			World : function(element) {
 				var currentScene = 0, sceneList = [];
-				this.play = function() {
 
+				var switchScene = function(beforScene, afterScene, animationType) {
+					beforScene.deactivation();
+					afterScene.activation();
 				};
+
 				this.hasNext = function() {
 					if (currentScene >= sceneList.length - 1) {
 						return false;
@@ -391,9 +390,8 @@
 					var sceneHasNext = sceneList[currentScene].next();
 					if (!sceneHasNext) {
 						if (this.hasNext()) {
-							sceneList[currentScene].deactivation();
+							switchScene(sceneList[currentScene], sceneList[currentScene + 1])
 							currentScene += 1;
-							sceneList[currentScene].activation();
 							return true;
 						} else {
 							return false;
@@ -405,9 +403,8 @@
 						if (currentScene === 0) {
 							return false;
 						}
-						sceneList[currentScene].deactivation();
+						switchScene(sceneList[currentScene], sceneList[currentScene - 1])
 						currentScene -= 1;
-						sceneList[currentScene].activation();
 						return true;
 					}
 					return false;
