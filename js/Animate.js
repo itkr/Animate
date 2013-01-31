@@ -301,16 +301,19 @@
 				};
 
 				this.hasNext = function() {
+					if (actionList.length === 0) {
+						return false;
+					}
+					if (actionList[currentAction].isPlayable()) {
+						return true;
+					}
 					if (currentAction >= actionList.length - 1) {
-						console.log('hasnext:false')
 						return false;
 					} else {
-						console.log('hasnext:true')
 						return true;
 					}
 				};
 				this.next = function() {
-					console.log(currentAction + ',' + actionList.length)
 					playCurrentAction();
 					if (this.hasNext()) {
 						currentAction += 1;
@@ -320,14 +323,15 @@
 					}
 				};
 				this.prev = function() {
-					console.log(currentAction + ',' + actionList.length)
 					if (currentAction === 0) {
 						return false;
 					}
 					for (var i = 0; i < viewList.length; i++) {
 						viewList[i].prev();
 					}
+					actionList[currentAction].reset();
 					currentAction -= 1;
+					actionList[currentAction].reset(); // TODO resetをどこで実行するか
 					return true;
 				};
 				this.addAction = function(obj) {
@@ -387,8 +391,9 @@
 					}
 				};
 				this.next = function() {
-					var sceneHasNext = sceneList[currentScene].next();
-					if (!sceneHasNext) {
+					if (sceneList[currentScene].hasNext()) {
+						sceneList[currentScene].next();
+					} else {
 						if (this.hasNext()) {
 							switchScene(sceneList[currentScene], sceneList[currentScene + 1])
 							currentScene += 1;
@@ -426,12 +431,21 @@
 			},
 
 			Action : function() {
+				var playable = true;
+
+				this.isPlayable = function() {
+					return playable;
+				};
+
 				this.play = function() {
-					this.action();
+					if (this.isPlayable()) {
+						this.action();
+						playable = false;
+					}
 				};
 
 				this.reset = function() {
-
+					playable = true;
 				};
 			},
 
