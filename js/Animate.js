@@ -294,22 +294,26 @@
 				};
 
 				var playCurrentAction = function() {
+					saveViewsParams();
 					if (actionList.length !== 0) {
-						saveViewsParams();
 						actionList[currentAction].play();
 					}
 				};
 
 				this.hasNext = function() {
 					if (actionList.length === 0) {
+						// アクションが指定されていない
 						return false;
 					}
 					if (actionList[currentAction].isPlayable()) {
+						// 現在のアクションが実行可能
 						return true;
 					}
 					if (currentAction >= actionList.length - 1) {
+						// リストに次がない
 						return false;
 					} else {
+						// リストに次がある
 						return true;
 					}
 				};
@@ -329,9 +333,13 @@
 					for (var i = 0; i < viewList.length; i++) {
 						viewList[i].prev();
 					}
-					actionList[currentAction].reset();
-					currentAction -= 1;
-					actionList[currentAction].reset(); // TODO resetをどこで実行するか
+					if (!actionList[currentAction].isPlayable()) {
+						// Sceneが変わったとき
+						actionList[currentAction].reset();
+					} else {
+						currentAction -= 1;
+						actionList[currentAction].reset();
+					}
 					return true;
 				};
 				this.addAction = function(obj) {
@@ -378,7 +386,7 @@
 			World : function(element) {
 				var currentScene = 0, sceneList = [];
 
-				var switchScene = function(beforScene, afterScene, animationType) {
+				var switchScene = function(beforScene, afterScene, animationType, isRivers) {
 					beforScene.deactivation();
 					afterScene.activation();
 				};
