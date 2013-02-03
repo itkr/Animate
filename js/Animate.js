@@ -283,6 +283,8 @@
 				var element = document.createElement('div');
 				element.setAttribute('class', 'scene');
 
+				this.style = element.style;
+
 				this.setTo = function(parent_element) {
 					parent_element.appendChild(element);
 				};
@@ -384,11 +386,36 @@
 			},
 
 			World : function(element) {
-				var currentScene = 0, sceneList = [];
+				var currentScene = 0, sceneList = [], locked = false;
+				var that = this;
 
 				var switchScene = function(beforScene, afterScene, animationType, isRivers) {
-					beforScene.deactivation();
-					afterScene.activation();
+					that.lock();
+					var bgcolor = 255;
+					var anim = setInterval(function() {
+						bgcolor -= 50;
+						beforScene.style.backgroundColor = 'rgb(' + bgcolor + ',' + bgcolor + ',' + bgcolor + ')';
+						if (bgcolor <= 0) {
+							clearInterval(anim);
+							bgcolor = 255;
+							beforScene.style.backgroundColor = 'rgb(' + bgcolor + ',' + bgcolor + ',' + bgcolor + ')';
+							beforScene.deactivation();
+							afterScene.activation();
+							that.unLock();
+						}
+					}, 100);
+				};
+
+				this.lock = function() {
+					locked = true;
+				};
+
+				this.unLock = function() {
+					locked = false;
+				};
+
+				this.isLocked = function() {
+					return locked;
 				};
 
 				this.hasNext = function() {
@@ -399,28 +426,33 @@
 					}
 				};
 				this.next = function() {
-					if (sceneList[currentScene].hasNext()) {
-						sceneList[currentScene].next();
-					} else {
-						if (this.hasNext()) {
-							switchScene(sceneList[currentScene], sceneList[currentScene + 1])
-							currentScene += 1;
-							return true;
+					console.log(this.isLocked());
+					if (!this.isLocked()) {
+						if (sceneList[currentScene].hasNext()) {
+							sceneList[currentScene].next();
 						} else {
-							return false;
+							if (this.hasNext()) {
+								switchScene(sceneList[currentScene], sceneList[currentScene + 1])
+								currentScene += 1;
+								return true;
+							} else {
+								return false;
+							}
 						}
-					};
+					}
 				};
 				this.prev = function() {
-					if (sceneList[currentScene].prev() === false) {
-						if (currentScene === 0) {
-							return false;
+					if (!this.isLocked()) {
+						if (sceneList[currentScene].prev() === false) {
+							if (currentScene === 0) {
+								return false;
+							}
+							switchScene(sceneList[currentScene], sceneList[currentScene - 1])
+							currentScene -= 1;
+							return true;
 						}
-						switchScene(sceneList[currentScene], sceneList[currentScene - 1])
-						currentScene -= 1;
-						return true;
+						return false;
 					}
-					return false;
 				};
 				this.addScene = function(Obj) {
 					Animate.tools.extend(Obj, Animate.core.Scene)
