@@ -157,6 +157,19 @@
 				};
 			},
 
+			TextView : function() {
+				var that = this;
+				var text = '';
+				this.element = document.creatElement('div');
+
+				this.setText = function(_text) {
+					text = _text;
+					this.element.innerHTML = _text;
+					return this;
+				};
+
+			},
+
 			CanvasView : function() {
 				var INSCRIBED_CIRCLE = 0.298;
 				var CIRCUMCIRCLE = 0.577;
@@ -307,7 +320,7 @@
 					element.style.MozOpacity = '0.' + alpha;
 					element.style.MsFilter = '"alpha(opacity=' + alpha + ')"';
 				});
-				
+
 				this.setTo = function(parent_element) {
 					parent_element.appendChild(element);
 				};
@@ -428,22 +441,22 @@
 						}
 					}, 100);
 				};
-				
+
 				// var switchScene = function(beforScene, afterScene, animationType, isRivers) {
-					// that.lock();
-					// var alpha = 100;
-					// var anim = setInterval(function() {
-						// alpha -= 20;
-						// beforScene.alpha = alpha;
-						// if (alpha <= 0) {
-							// clearInterval(anim);
-							// alpha = 100;
-							// beforScene.alpha = alpha;
-							// beforScene.deactivation();
-							// afterScene.activation();
-							// that.unLock();
-						// }
-					// }, 100);
+				// that.lock();
+				// var alpha = 100;
+				// var anim = setInterval(function() {
+				// alpha -= 20;
+				// beforScene.alpha = alpha;
+				// if (alpha <= 0) {
+				// clearInterval(anim);
+				// alpha = 100;
+				// beforScene.alpha = alpha;
+				// beforScene.deactivation();
+				// afterScene.activation();
+				// that.unLock();
+				// }
+				// }, 100);
 				// };
 
 				this.lock = function() {
@@ -466,7 +479,6 @@
 					}
 				};
 				this.next = function() {
-					console.log(this.isLocked());
 					if (!this.isLocked()) {
 						if (sceneList[currentScene].hasNext()) {
 							sceneList[currentScene].next();
@@ -537,6 +549,7 @@
 		Animate.tools.extend(objects.Scene, objects.Base);
 		Animate.tools.extend(objects.View, objects.Base);
 		Animate.tools.extend(objects.CanvasView, objects.View);
+		Animate.tools.extend(objects.TextView, objects.View);
 		return objects;
 	})();
 
