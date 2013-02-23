@@ -39,6 +39,9 @@
 				var alpha = 100;
 				this.element = document.createElement('div');
 				this.element.setAttribute('class', 'view');
+				
+				//仮
+				this.element.style.fontFamily = this.fontFamily;
 
 				this.__defineGetter__("alpha", function() {
 					return alpha;
@@ -542,6 +545,10 @@
 			},
 
 			Base : function() {
+				// べースのセッティングなど入れる
+				// $A.init(element, settings) で初期化
+				this.fontFamily = '"arial black"';
+				
 
 			}
 		};
@@ -573,7 +580,7 @@
 
 	Animate.fn = (function() {
 		var objects = {
-			init : function(element) {
+			init : function(element, settings) {
 				return new Animate.core.World(element);
 			},
 			view : function(Obj) {
