@@ -36,9 +36,21 @@
 				var that = this;
 				var history = [];
 				var currentHistory = 0;
-				var element = document.createElement('div');
-				element.setAttribute('class', 'view');
-				this.element = element;
+				var alpha = 100;
+				this.element = document.createElement('div');
+				this.element.setAttribute('class', 'view');
+
+				this.__defineGetter__("alpha", function() {
+					return alpha;
+				});
+
+				this.__defineSetter__("alpha", function(_alpha) {
+					alpha = _alpha;
+					this.element.style.opacity = '0.' + alpha;
+					this.element.style.filter = 'alpha(opacity=' + alpha + ')';
+					this.element.style.MozOpacity = '0.' + alpha;
+					this.element.style.MsFilter = '"alpha(opacity=' + alpha + ')"';
+				});
 
 				this.__defineGetter__("width", function() {
 					return parseInt(this.element.style.width.replace("px", ""), 10);
@@ -149,11 +161,10 @@
 				var INSCRIBED_CIRCLE = 0.298;
 				var CIRCUMCIRCLE = 0.577;
 				var that = this;
-				var element = document.createElement('canvas');
-				var context = element.getContext('2d');
-				this.element = element;
+				this.element = document.createElement('canvas');
+				var context = this.element.getContext('2d');
 
-				element.setAttribute('class', 'canvasView');
+				this.element.setAttribute('class', 'canvasView');
 
 				// 正三角形の塗り
 				this.drawFillTriangle = function(centerX, centerY, edge, color) {
@@ -285,6 +296,18 @@
 
 				this.style = element.style;
 
+				this.__defineGetter__("alpha", function() {
+					return alpha;
+				});
+
+				this.__defineSetter__("alpha", function(_alpha) {
+					alpha = _alpha;
+					element.style.opacity = '0.' + alpha;
+					element.style.filter = 'alpha(opacity=' + alpha + ')';
+					element.style.MozOpacity = '0.' + alpha;
+					element.style.MsFilter = '"alpha(opacity=' + alpha + ')"';
+				});
+				
 				this.setTo = function(parent_element) {
 					parent_element.appendChild(element);
 				};
@@ -405,6 +428,23 @@
 						}
 					}, 100);
 				};
+				
+				// var switchScene = function(beforScene, afterScene, animationType, isRivers) {
+					// that.lock();
+					// var alpha = 100;
+					// var anim = setInterval(function() {
+						// alpha -= 20;
+						// beforScene.alpha = alpha;
+						// if (alpha <= 0) {
+							// clearInterval(anim);
+							// alpha = 100;
+							// beforScene.alpha = alpha;
+							// beforScene.deactivation();
+							// afterScene.activation();
+							// that.unLock();
+						// }
+					// }, 100);
+				// };
 
 				this.lock = function() {
 					locked = true;
