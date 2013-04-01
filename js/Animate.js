@@ -8,8 +8,18 @@
 	 */
 	Animate.tools = {
 
+		// extend : function(Child, Parent) {
+			// Child.prototype = new Parent();
+			// return Child;
+		// },
+
 		extend : function(Child, Parent) {
-			Child.prototype = new Parent();
+			var NewParent = Parent;
+			if ( typeof Parent.prototype.parent !== "undefined") {
+				NewParent = Animate.tools.extend(Parent, Parent.prototype.parent);
+			}
+			Child.prototype = new NewParent();
+			Child.prototype.parent = NewParent;
 			return Child;
 		},
 
@@ -39,7 +49,7 @@
 				var alpha = 100;
 				this.element = document.createElement('div');
 				this.element.setAttribute('class', 'view');
-				
+
 				//仮
 				this.element.style.fontFamily = this.fontFamily;
 
@@ -548,7 +558,6 @@
 				// べースのセッティングなど入れる
 				// $A.init(element, settings) で初期化
 				this.fontFamily = '"arial black"';
-				
 
 			}
 		};

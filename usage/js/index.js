@@ -62,6 +62,35 @@
 				lineWidth : 6
 			});
 			this.hide();
+			this.name='c1';
+		}));
+		
+		var canvas2 = this.add($A.canvas(function() {
+			this.width = 150;
+			this.height = 150;
+			this.x = 150;
+			this.y = 150;
+			this.drawFillTriangle(this.width / 2, this.height / 2, 60, '#3366ff');
+			this.drawStrokeTriangle(this.width / 2, this.height / 2, 60, {
+				color : '#cc6666',
+				lineWidth : 6
+			});
+			this.hide();
+			this.name='c2';
+		}));
+		
+		var canvas3 = this.add($A.canvas(function() {
+			this.width = 150;
+			this.height = 150;
+			this.x = 250;
+			this.y = 250;
+			this.drawFillTriangle(this.width / 2, this.height / 2, 60, '#3366ff');
+			this.drawStrokeTriangle(this.width / 2, this.height / 2, 60, {
+				color : '#cc6666',
+				lineWidth : 6
+			});
+			this.hide();
+			this.name='c3';
 		}));
 
 		this.addAction($A.action(function() {
@@ -76,9 +105,17 @@
 			view3.show();
 		}));
 
-		// this.addAction($A.action(function() {
-			// canvas1.show();
-		// }));
+		this.addAction($A.action(function() {
+			canvas1.show();
+		}));
+		
+		this.addAction($A.action(function() {
+			canvas2.show();
+		}));
+		
+		this.addAction($A.action(function() {
+			canvas3.show();
+		}));
 
 		// this.addAction($A.action(function() {
 			// canvas1.x = 0;
