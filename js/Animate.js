@@ -8,11 +8,6 @@
 	 */
 	Animate.tools = {
 
-		// extend : function(Child, Parent) {
-			// Child.prototype = new Parent();
-			// return Child;
-		// },
-
 		extend : function(Child, Parent) {
 			var NewParent = Parent;
 			if ( typeof Parent.prototype.parent !== "undefined") {
@@ -49,9 +44,6 @@
 				var alpha = 100;
 				this.element = document.createElement('div');
 				this.element.setAttribute('class', 'view');
-
-				//仮
-				this.element.style.fontFamily = this.fontFamily;
 
 				this.__defineGetter__("alpha", function() {
 					return alpha;
@@ -104,11 +96,6 @@
 
 				this.setTo = function(parent_element) {
 					parent_element.appendChild(this.element);
-					return this;
-				};
-
-				this.text = function(text) {
-					this.element.innerHTML = text;
 					return this;
 				};
 
@@ -173,7 +160,10 @@
 			TextView : function() {
 				var that = this;
 				var text = '';
-				this.element = document.creatElement('div');
+				this.element = document.createElement('div');
+
+				//仮
+				this.element.style.fontFamily = this.fontFamily;
 
 				this.setText = function(_text) {
 					text = _text;
@@ -597,6 +587,9 @@
 			},
 			canvas : function(Obj) {
 				return Animate.tools.extend(Obj, Animate.core.CanvasView);
+			},
+			text : function(Obj) {
+				return Animate.tools.extend(Obj, Animate.core.TextView);
 			},
 			model : function(Obj) {
 				return Animate.tools.extend(Obj, Animate.core.Model);

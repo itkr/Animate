@@ -30,24 +30,24 @@
 	 */
 	var scene1 = world.addScene(function() {
 
-		var view1 = this.add($A.view(function() {
+		var view1 = this.add($A.text(function() {
 			this.width = 150;
 			this.y = 0;
-			this.text('text1');
+			this.setText('text1');
 			this.hide();
 		}));
 
-		var view2 = this.add($A.view(function() {
+		var view2 = this.add($A.text(function() {
 			this.width = 150;
 			this.y = 60;
-			this.text('text2');
+			this.setText('text2');
 			this.hide();
 		}));
 
-		var view3 = this.add($A.view(function() {
+		var view3 = this.add($A.text(function() {
 			this.width = 150;
 			this.y = 120;
-			this.text('text3');
+			this.setText('text3');
 			this.hide();
 		}));
 
@@ -64,34 +64,6 @@
 			this.hide();
 			this.name='c1';
 		}));
-		
-		var canvas2 = this.add($A.canvas(function() {
-			this.width = 150;
-			this.height = 150;
-			this.x = 150;
-			this.y = 150;
-			this.drawFillTriangle(this.width / 2, this.height / 2, 60, '#3366ff');
-			this.drawStrokeTriangle(this.width / 2, this.height / 2, 60, {
-				color : '#cc6666',
-				lineWidth : 6
-			});
-			this.hide();
-			this.name='c2';
-		}));
-		
-		var canvas3 = this.add($A.canvas(function() {
-			this.width = 150;
-			this.height = 150;
-			this.x = 250;
-			this.y = 250;
-			this.drawFillTriangle(this.width / 2, this.height / 2, 60, '#3366ff');
-			this.drawStrokeTriangle(this.width / 2, this.height / 2, 60, {
-				color : '#cc6666',
-				lineWidth : 6
-			});
-			this.hide();
-			this.name='c3';
-		}));
 
 		this.addAction($A.action(function() {
 			view1.show();
@@ -107,14 +79,6 @@
 
 		this.addAction($A.action(function() {
 			canvas1.show();
-		}));
-		
-		this.addAction($A.action(function() {
-			canvas2.show();
-		}));
-		
-		this.addAction($A.action(function() {
-			canvas3.show();
 		}));
 
 		// this.addAction($A.action(function() {
@@ -134,10 +98,10 @@
 	 * Scene2
 	 */
 	var scene2 = world.addScene(function() {
-		this.add($A.view(function() {
+		this.add($A.text(function() {
 			this.width = 150;
 			this.y = 0;
-			this.text('Scene2');
+			this.setText('Scene2');
 		}));
 	});
 
@@ -145,10 +109,10 @@
 	 * Scene3
 	 */
 	var scene3 = world.addScene(function() {
-		this.add($A.view(function() {
+		this.add($A.text(function() {
 			this.width = 150;
 			this.y = 0;
-			this.text('Scene3');
+			this.setText('Scene3');
 		}));
 	});
 
