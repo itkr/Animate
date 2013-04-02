@@ -3,6 +3,31 @@
 	var document = global.document;
 	var Animate = {};
 
+	
+	Animate.defaultSettings = {
+		"scene" : {
+			"width" : 800,
+			"height" : 600,
+		},
+		"text" : {
+			"fontFamily" : '"arial black"',
+		}
+	};
+
+	Animate.tree = {
+		"Base" : {
+			"World" : {},
+			"Scene" : {},
+			"Action" : {},
+			"View" : {
+				"TextView" : {},
+				"CanvasView" : {
+					"Sprite" : {}
+				}
+			}
+		}
+	}
+
 	/**
 	 * アプリケーション全体に関わる関数など
 	 */
