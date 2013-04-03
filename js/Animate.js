@@ -151,19 +151,19 @@
 					return true;
 				}
 
-				this.fixSnapShot = function(params) {
-					var fixParams = {};
-					fixParams.x = ( typeof params.x !== 'undefined') ? params.x : this.x;
-					fixParams.y = ( typeof params.y !== 'undefined') ? params.y : this.y;
-					fixParams.width = ( typeof params.width !== 'undefined') ? params.width : this.width;
-					fixParams.height = ( typeof params.height !== 'undefined') ? params.height : this.height;
-					fixParams.display = ( typeof params.display !== 'undefined') ? params.display : this.display;
-					return fixParams;
+				this.snapShot = function(params) {
+					var objParams = {};
+					objParams.x = ( typeof params.x !== 'undefined') ? params.x : this.x;
+					objParams.y = ( typeof params.y !== 'undefined') ? params.y : this.y;
+					objParams.width = ( typeof params.width !== 'undefined') ? params.width : this.width;
+					objParams.height = ( typeof params.height !== 'undefined') ? params.height : this.height;
+					objParams.display = ( typeof params.display !== 'undefined') ? params.display : this.display;
+					return objParams;
 				};
 
 				this.next = function() {
 					if (currentHistory === history.length) {
-						history.push(this.fixSnapShot({}));
+						history.push(this.snapShot({}));
 					}
 					currentHistory += 1;
 				};
@@ -492,23 +492,6 @@
 						}
 					}, 100);
 				};
-
-				// var switchScene = function(beforScene, afterScene, animationType, isRivers) {
-				// that.lock();
-				// var alpha = 100;
-				// var anim = setInterval(function() {
-				// alpha -= 20;
-				// beforScene.alpha = alpha;
-				// if (alpha <= 0) {
-				// clearInterval(anim);
-				// alpha = 100;
-				// beforScene.alpha = alpha;
-				// beforScene.deactivation();
-				// afterScene.activation();
-				// that.unLock();
-				// }
-				// }, 100);
-				// };
 
 				this.lock = function() {
 					locked = true;
