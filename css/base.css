@@ -9,28 +9,23 @@ body {
 canvas {
 	background-color: #ccccff;
 }
-.box {
-	background-color: #3366ff;
-}
-.world {
-
-}
 .scene {
 	position: relative;
 	display: block;
 	margin: 20px auto 20px auto;
-	text-align: center;
-	font-size:40px;
 	background-color: #ffffff;
 	-moz-box-shadow: 0 0 12px #666666, 7px 7px 7px #666666;
 	-webkit-box-shadow: 0 0 12px #666666, 7px 7px 7px #666666;
 }
 .view {
 	position: absolute;
+	display: block;
 }
 .canvasView {
 	position: absolute;
+	display: block;
 }
 .textView {
 	position: absolute;
+	display: block;
 }

@@ -19,6 +19,8 @@
 		},
 		"text" : {
 			"fontFamily" : '"arial black"',
+			"color" : "#6699cc",
+			"fontSize": 40,
 		}
 	};
 
@@ -201,7 +203,18 @@
 				this.__defineSetter__("fontFamily", function(fontFamily) {
 					this.element.style.fontFamily = fontFamily;
 				});
-
+				this.__defineGetter__("color", function() {
+					return this.element.style.color;
+				});
+				this.__defineSetter__("color", function(color) {
+					this.element.style.color = color;
+				});
+				this.__defineGetter__("fontSize", function() {
+					return parseInt(this.element.style.fontSize.replace("px", ""), 10);
+				});
+				this.__defineSetter__("fontSize", function(fontSize) {
+					this.element.style.fontSize = fontSize + 'px';
+				});
 				this.setText = function(_text) {
 					text = _text;
 					this.element.innerHTML = _text;
@@ -553,7 +566,9 @@
 				this.removeScene = function() {
 
 				};
-
+				this.resize = function(width, height) {
+					
+				};
 			},
 
 			Action : function() {
