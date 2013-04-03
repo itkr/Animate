@@ -3,11 +3,19 @@
 	var document = global.document;
 	var Animate = {};
 
-	
 	Animate.defaultSettings = {
+		"world" : {
+
+		},
 		"scene" : {
 			"width" : 800,
 			"height" : 600,
+		},
+		"view" : {
+
+		},
+		"canvas" : {
+
 		},
 		"text" : {
 			"fontFamily" : '"arial black"',
@@ -187,15 +195,19 @@
 				var text = '';
 				this.element = document.createElement('div');
 
-				//仮
-				this.element.style.fontFamily = this.fontFamily;
+				this.__defineGetter__("fontFamily", function() {
+					return this.element.style.fontFamily;
+				});
+				this.__defineSetter__("fontFamily", function(fontFamily) {
+					this.element.style.fontFamily = fontFamily;
+				});
 
 				this.setText = function(_text) {
 					text = _text;
 					this.element.innerHTML = _text;
 					return this;
 				};
-
+				this.applySettings('text');
 			},
 
 			CanvasView : function() {
@@ -334,13 +346,13 @@
 				var that = this;
 				var element = document.createElement('div');
 				element.setAttribute('class', 'scene');
+				this.element = element;
 
 				this.style = element.style;
 
 				this.__defineGetter__("alpha", function() {
 					return alpha;
 				});
-
 				this.__defineSetter__("alpha", function(_alpha) {
 					alpha = _alpha;
 					element.style.opacity = '0.' + alpha;
@@ -348,7 +360,17 @@
 					element.style.MozOpacity = '0.' + alpha;
 					element.style.MsFilter = '"alpha(opacity=' + alpha + ')"';
 				});
-
+				this.__defineSetter__("width", function(width) {
+					this.element.width = width;
+					this.element.style.width = width + 'px';
+				});
+				this.__defineGetter__("height", function() {
+					return parseInt(this.element.style.height.replace("px", ""), 10);
+				});
+				this.__defineSetter__("height", function(height) {
+					this.element.height = height;
+					this.element.style.height = height + 'px';
+				});
 				this.setTo = function(parent_element) {
 					parent_element.appendChild(element);
 				};
@@ -447,6 +469,7 @@
 					element.style.display = 'none';
 					return this;
 				};
+				this.applySettings('scene');
 			},
 
 			World : function(element) {
@@ -570,10 +593,12 @@
 			},
 
 			Base : function() {
-				// べースのセッティングなど入れる
-				// $A.init(element, settings) で初期化
-				this.fontFamily = '"arial black"';
-
+				this.applySettings = function(objType) {
+					var setting = this.settings[objType];
+					for (key in setting) {
+						this[key] = setting[key];
+					}
+				}
 			}
 		};
 		Animate.tools.extend(objects.World, objects.Base);
@@ -605,6 +630,10 @@
 	Animate.fn = (function() {
 		var objects = {
 			init : function(element, settings) {
+				if ( typeof settings === 'undefined') {
+					settings = Animate.defaultSettings;
+				}
+				Animate.core.Base.prototype.settings = settings;
 				return new Animate.core.World(element);
 			},
 			view : function(Obj) {
