@@ -20,7 +20,7 @@
 		"text" : {
 			"fontFamily" : '"arial black"',
 			"color" : "#6699cc",
-			"fontSize": 40,
+			"fontSize" : 40,
 		}
 	};
 
@@ -62,6 +62,16 @@
 				eventTarget.attachEvent(eventType, eventHandler);
 			} else {
 				eventTarget["on" + eventType] = eventHandler;
+			}
+		},
+
+		applyTree : function(objects, tree) {
+			for (parent in tree) {
+				for (child in tree[parent]) {
+					console.log(parent + ',' + child);
+					Animate.tools.extend(objects[child], objects[parent]);
+				}
+				Animate.tools.applyTree(objects, tree[parent]);
 			}
 		}
 	};
@@ -567,7 +577,7 @@
 
 				};
 				this.resize = function(width, height) {
-					
+
 				};
 			},
 
@@ -599,11 +609,7 @@
 				}
 			}
 		};
-		Animate.tools.extend(objects.World, objects.Base);
-		Animate.tools.extend(objects.Scene, objects.Base);
-		Animate.tools.extend(objects.View, objects.Base);
-		Animate.tools.extend(objects.CanvasView, objects.View);
-		Animate.tools.extend(objects.TextView, objects.View);
+		Animate.tools.applyTree(objects, Animate.tree);
 		return objects;
 	})();
 
