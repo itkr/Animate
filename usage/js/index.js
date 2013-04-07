@@ -80,6 +80,11 @@
 		this.addAction($A.action(function() {
 			canvas1.show();
 		}));
+		
+		// this.addAction($A.action(function() {
+			// world.resize(0.5);
+		// }));
+
 
 		// this.addAction($A.action(function() {
 			// canvas1.x = 0;

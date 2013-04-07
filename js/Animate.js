@@ -5,7 +5,8 @@
 
 	Animate.defaultSettings = {
 		"world" : {
-
+			"width" : 800,
+			"height" : 600,
 		},
 		"scene" : {
 			"width" : 800,
@@ -43,6 +44,7 @@
 	 */
 	Animate.tools = {
 
+		// オブジェクトを継承させる
 		extend : function(Child, Parent) {
 			var NewParent = Parent;
 			if ( typeof Parent.prototype.parent !== "undefined") {
@@ -65,10 +67,10 @@
 			}
 		},
 
+		// オブジェクトの継承関係を適用する
 		applyTree : function(objects, tree) {
 			for (parent in tree) {
 				for (child in tree[parent]) {
-					console.log(parent + ',' + child);
 					Animate.tools.extend(objects[child], objects[parent]);
 				}
 				Animate.tools.applyTree(objects, tree[parent]);
@@ -200,6 +202,12 @@
 					this.display = history[0].display;
 					currntHistory = 0;
 				};
+
+				this.resize = function(magnification) {
+					this.width *= magnification;
+					this.heigth *= magnification;
+				};
+
 			},
 
 			TextView : function() {
@@ -230,6 +238,13 @@
 					this.element.innerHTML = _text;
 					return this;
 				};
+
+				this.resize = function(magnification) {
+					this.width *= magnification;
+					this.heigth *= magnification;
+					this.fontSize *= magnification;
+				};
+
 				this.applySettings('text');
 			},
 
@@ -346,6 +361,8 @@
 					context.closePath();
 				};
 
+				// this.applySettings('canvas');
+
 			},
 
 			Sprite : function(element) {
@@ -382,6 +399,9 @@
 					element.style.filter = 'alpha(opacity=' + alpha + ')';
 					element.style.MozOpacity = '0.' + alpha;
 					element.style.MsFilter = '"alpha(opacity=' + alpha + ')"';
+				});
+				this.__defineGetter__("width", function() {
+					return parseInt(this.element.style.width.replace("px", ""), 10);
 				});
 				this.__defineSetter__("width", function(width) {
 					this.element.width = width;
@@ -492,6 +512,16 @@
 					element.style.display = 'none';
 					return this;
 				};
+
+				this.resize = function(magnification) {
+					var i;
+					for ( i = 0; i < viewList.length; i++) {
+						viewList[i].resize(magnification);
+					}
+					this.width *= magnification;
+					this.height *= magnification;
+				};
+
 				this.applySettings('scene');
 			},
 
@@ -515,6 +545,23 @@
 						}
 					}, 100);
 				};
+
+				this.element = element;
+
+				this.__defineGetter__("width", function() {
+					return parseInt(this.element.style.width.replace("px", ""), 10);
+				});
+				this.__defineSetter__("width", function(width) {
+					this.element.width = width;
+					this.element.style.width = width + 'px';
+				});
+				this.__defineGetter__("height", function() {
+					return parseInt(this.element.style.height.replace("px", ""), 10);
+				});
+				this.__defineSetter__("height", function(height) {
+					this.element.height = height;
+					this.element.style.height = height + 'px';
+				});
 
 				this.lock = function() {
 					locked = true;
@@ -576,9 +623,16 @@
 				this.removeScene = function() {
 
 				};
-				this.resize = function(width, height) {
-
+				this.resize = function(magnification) {
+					var i;
+					for ( i = 0; i < sceneList.length; i++) {
+						sceneList[i].resize(magnification);
+					}
+					this.width *= magnification;
+					this.heigth *= magnification;
 				};
+
+				this.applySettings('world');
 			},
 
 			Action : function() {
