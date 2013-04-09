@@ -1,29 +1,15 @@
 (function(document) {
 
-	/**
-	 * Project
-	 */
-	var body = document.getElementsByTagName('body')[0];
-	var world = $A.init(body);
-
-	// ---- デバッグ用 ----
-	var next_a = document.createElement('a');
-	var next_text = document.createTextNode('next ');
-	next_a.setAttribute('href', 'javascript:void(0)');
-	next_a.onclick = function() {
+	var $ = function(id){
+		return document.getElementById(id);
+	};
+	var world = $A.init($('world'));
+	$('next').onclick = function() {
 		world.next();
 	};
-	next_a.appendChild(next_text);
-	body.appendChild(next_a);
-	var prev_a = document.createElement('a');
-	var prev_text = document.createTextNode(' prev');
-	prev_a.setAttribute('href', 'javascript:void(0)');
-	prev_a.onclick = function() {
+	$('prev').onclick = function() {
 		world.prev();
 	};
-	prev_a.appendChild(prev_text);
-	body.appendChild(prev_a);
-	// ---- デバッグ用 ----
 
 	/**
 	 * Scene1
