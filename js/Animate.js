@@ -107,32 +107,41 @@
 				this.__defineGetter__("width", function() {
 					return parseInt(this.element.style.width.replace("px", ""), 10);
 				});
+
 				this.__defineSetter__("width", function(width) {
 					this.element.width = width;
 					this.element.style.width = width + 'px';
 				});
+
 				this.__defineGetter__("height", function() {
 					return parseInt(this.element.style.height.replace("px", ""), 10);
 				});
+
 				this.__defineSetter__("height", function(height) {
 					this.element.height = height;
 					this.element.style.height = height + 'px';
 				});
+
 				this.__defineGetter__("x", function() {
 					return parseInt(this.element.style.left.replace("px", ""), 10);
 				});
+
 				this.__defineSetter__("x", function(x) {
 					this.element.style.left = x + 'px';
 				});
+
 				this.__defineGetter__("y", function() {
 					return parseInt(this.element.style.top.replace("px", ""), 10);
 				});
+
 				this.__defineSetter__("y", function(y) {
 					this.element.style.top = y + 'px';
 				});
+
 				this.__defineGetter__("display", function() {
 					return this.element.style.display === "block";
 				});
+
 				this.__defineSetter__("display", function(display) {
 					if (display) {
 						this.element.style.display = "block";
@@ -218,21 +227,27 @@
 				this.__defineGetter__("fontFamily", function() {
 					return this.element.style.fontFamily;
 				});
+
 				this.__defineSetter__("fontFamily", function(fontFamily) {
 					this.element.style.fontFamily = fontFamily;
 				});
+
 				this.__defineGetter__("color", function() {
 					return this.element.style.color;
 				});
+
 				this.__defineSetter__("color", function(color) {
 					this.element.style.color = color;
 				});
+
 				this.__defineGetter__("fontSize", function() {
 					return parseInt(this.element.style.fontSize.replace("px", ""), 10);
 				});
+
 				this.__defineSetter__("fontSize", function(fontSize) {
 					this.element.style.fontSize = fontSize + 'px';
 				});
+
 				this.setText = function(_text) {
 					text = _text;
 					this.element.innerHTML = _text;
@@ -245,17 +260,17 @@
 					this.fontSize *= magnification;
 				};
 
-				this.applySettings('text');
+				// this.applySettings('text');
 			},
 
 			CanvasView : function() {
 				var INSCRIBED_CIRCLE = 0.298;
 				var CIRCUMCIRCLE = 0.577;
 				var that = this;
+				var context;
 				this.element = document.createElement('canvas');
-				var context = this.element.getContext('2d');
-
 				this.element.setAttribute('class', 'canvasView');
+				context = this.element.getContext('2d');
 
 				// 正三角形の塗り
 				this.drawFillTriangle = function(centerX, centerY, edge, color) {
@@ -384,38 +399,42 @@
 				var viewList = [];
 				var active = false;
 				var that = this;
-				var element = document.createElement('div');
-				element.setAttribute('class', 'scene');
-				this.element = element;
-
-				this.style = element.style;
+				this.element = document.createElement('div');
+				this.element.setAttribute('class', 'scene');
+				this.style = this.element.style;
 
 				this.__defineGetter__("alpha", function() {
 					return alpha;
 				});
+
 				this.__defineSetter__("alpha", function(_alpha) {
 					alpha = _alpha;
-					element.style.opacity = '0.' + alpha;
-					element.style.filter = 'alpha(opacity=' + alpha + ')';
-					element.style.MozOpacity = '0.' + alpha;
-					element.style.MsFilter = '"alpha(opacity=' + alpha + ')"';
+					this.element.style.opacity = '0.' + alpha;
+					this.element.style.filter = 'alpha(opacity=' + alpha + ')';
+					this.element.style.MozOpacity = '0.' + alpha;
+					this.element.style.MsFilter = '"alpha(opacity=' + alpha + ')"';
 				});
+
 				this.__defineGetter__("width", function() {
 					return parseInt(this.element.style.width.replace("px", ""), 10);
 				});
+
 				this.__defineSetter__("width", function(width) {
 					this.element.width = width;
 					this.element.style.width = width + 'px';
 				});
+
 				this.__defineGetter__("height", function() {
 					return parseInt(this.element.style.height.replace("px", ""), 10);
 				});
+
 				this.__defineSetter__("height", function(height) {
 					this.element.height = height;
 					this.element.style.height = height + 'px';
 				});
+
 				this.setTo = function(parent_element) {
-					parent_element.appendChild(element);
+					parent_element.appendChild(this.element);
 				};
 
 				var saveViewsParams = function() {
@@ -448,6 +467,7 @@
 						return true;
 					}
 				};
+
 				this.next = function() {
 					playCurrentAction();
 					if (this.hasNext()) {
@@ -457,6 +477,7 @@
 						return false;
 					}
 				};
+
 				this.prev = function() {
 					if (currentAction === 0) {
 						return false;
@@ -473,20 +494,26 @@
 					}
 					return true;
 				};
+
 				this.addAction = function(obj) {
 					actionList.push(obj);
 				};
-				this.add = function(Obj) {
-					var obj = new Obj();
+
+				// this.add = function(obj) {
+				// if (obj.element.style.display === '') {
+				// obj.display = true;
+				// }
+				// obj.setTo(element);
+				// viewList.push(obj);
+				// return obj;
+				// };
+				this.add = function(obj) {
 					if (obj.element.style.display === '') {
 						obj.display = true;
 					}
-					obj.setTo(element);
+					this.element.appendChild(obj.element);
 					viewList.push(obj);
 					return obj;
-				};
-				this.remove = function() {
-
 				};
 
 				this.isActive = function() {
@@ -504,12 +531,12 @@
 				};
 
 				this.show = function() {
-					element.style.display = 'block';
+					this.element.style.display = 'block';
 					return this;
 				};
 
 				this.hide = function() {
-					element.style.display = 'none';
+					this.element.style.display = 'none';
 					return this;
 				};
 
@@ -522,11 +549,13 @@
 					this.height *= magnification;
 				};
 
-				this.applySettings('scene');
+				// this.applySettings('scene');
 			},
 
 			World : function(element) {
-				var currentScene = 0, sceneList = [], locked = false;
+				var currentScene = 0;
+				var sceneList = [];
+				var locked = false;
 				var that = this;
 
 				var switchScene = function(beforScene, afterScene, animationType, isRivers) {
@@ -551,13 +580,16 @@
 				this.__defineGetter__("width", function() {
 					return parseInt(this.element.style.width.replace("px", ""), 10);
 				});
+
 				this.__defineSetter__("width", function(width) {
 					this.element.width = width;
 					this.element.style.width = width + 'px';
 				});
+
 				this.__defineGetter__("height", function() {
 					return parseInt(this.element.style.height.replace("px", ""), 10);
 				});
+
 				this.__defineSetter__("height", function(height) {
 					this.element.height = height;
 					this.element.style.height = height + 'px';
@@ -582,6 +614,7 @@
 						return true;
 					}
 				};
+
 				this.next = function() {
 					if (!this.isLocked()) {
 						if (sceneList[currentScene].hasNext()) {
@@ -597,6 +630,7 @@
 						}
 					}
 				};
+
 				this.prev = function() {
 					if (!this.isLocked()) {
 						if (sceneList[currentScene].prev() === false) {
@@ -610,19 +644,30 @@
 						return false;
 					}
 				};
+
+				// this.addScene = function(Obj) {
+					// Animate.tools.extend(Obj, Animate.core.Scene)
+					// var obj = new Obj();
+					// obj.applySettings('scene');
+					// if (sceneList.length !== 0) {
+						// obj.hide();
+					// }
+					// sceneList.push(obj);
+					// obj.setTo(element);
+					// return obj;
+				// };
 				this.addScene = function(Obj) {
 					Animate.tools.extend(Obj, Animate.core.Scene)
 					var obj = new Obj();
+					obj.applySettings('scene');
 					if (sceneList.length !== 0) {
 						obj.hide();
 					}
 					sceneList.push(obj);
-					obj.setTo(element);
+					this.element.appendChild(obj.element);
 					return obj;
 				};
-				this.removeScene = function() {
 
-				};
 				this.resize = function(magnification) {
 					var i;
 					for ( i = 0; i < sceneList.length; i++) {
@@ -632,7 +677,7 @@
 					this.heigth *= magnification;
 				};
 
-				this.applySettings('world');
+				// this.applySettings('world');
 			},
 
 			Action : function() {
@@ -660,7 +705,7 @@
 					for (key in setting) {
 						this[key] = setting[key];
 					}
-				}
+				};
 			}
 		};
 		Animate.tools.applyTree(objects, Animate.tree);
@@ -687,25 +732,45 @@
 
 	Animate.fn = (function() {
 		var objects = {
+
 			init : function(element, settings) {
+				var world;
 				if ( typeof settings === 'undefined') {
 					settings = Animate.defaultSettings;
 				}
 				Animate.core.Base.prototype.settings = settings;
-				return new Animate.core.World(element);
+				world = new Animate.core.World(element);
+				world.applySettings('world');
+				return world;
 			},
+
 			view : function(Obj) {
-				return Animate.tools.extend(Obj, Animate.core.View);
+				var Obj = Animate.tools.extend(Obj, Animate.core.View);
+				var obj = new Obj();
+				obj.applySettings('view');
+				return obj;
 			},
+
 			canvas : function(Obj) {
-				return Animate.tools.extend(Obj, Animate.core.CanvasView);
+				var Obj = Animate.tools.extend(Obj, Animate.core.CanvasView);
+				var obj = new Obj();
+				// obj.applySettings('canvas');
+				return obj;
 			},
+
 			text : function(Obj) {
-				return Animate.tools.extend(Obj, Animate.core.TextView);
+				var Obj = Animate.tools.extend(Obj, Animate.core.TextView);
+				var obj = new Obj();
+				obj.applySettings('text');
+				return obj;
 			},
+
 			model : function(Obj) {
-				return Animate.tools.extend(Obj, Animate.core.Model);
+				var Obj = Animate.tools.extend(Obj, Animate.core.Model);
+				var obj = new Obj();
+				return obj;
 			},
+
 			action : function(action) {
 				var Obj = function() {
 					this.action = action;
