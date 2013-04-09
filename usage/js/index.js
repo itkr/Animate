@@ -16,21 +16,21 @@
 	 */
 	var scene1 = world.addScene(function() {
 
-		var view1 = this.add($A.text(function() {
+		var view1 = this.add($A.title(function() {
 			this.width = 150;
 			this.y = 0;
 			this.setText('text1');
 			this.hide();
 		}));
 
-		var view2 = this.add($A.text(function() {
+		var view2 = this.add($A.sentence(function() {
 			this.width = 150;
 			this.y = 60;
 			this.setText('text2');
 			this.hide();
 		}));
 
-		var view3 = this.add($A.text(function() {
+		var view3 = this.add($A.sentence(function() {
 			this.width = 150;
 			this.y = 120;
 			this.setText('text3');
@@ -89,7 +89,7 @@
 	 * Scene2
 	 */
 	var scene2 = world.addScene(function() {
-		this.add($A.text(function() {
+		this.add($A.title(function() {
 			this.width = 150;
 			this.y = 0;
 			this.setText('Scene2');
@@ -100,7 +100,7 @@
 	 * Scene3
 	 */
 	var scene3 = world.addScene(function() {
-		this.add($A.text(function() {
+		this.add($A.title(function() {
 			this.width = 150;
 			this.y = 0;
 			this.setText('Scene3');

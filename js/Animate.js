@@ -22,7 +22,17 @@
 			"fontFamily" : '"arial black"',
 			"color" : "#6699cc",
 			"fontSize" : 40,
-		}
+		},
+		"title" : {
+			"fontFamily" : '"arial black"',
+			"color" : "#6699cc",
+			"fontSize" : 50,
+		},
+		"sentence" : {
+			"fontFamily" : '"arial black"',
+			"color" : "#6699cc",
+			"fontSize" : 40,
+		},
 	};
 
 	Animate.tree = {
@@ -31,10 +41,14 @@
 			"Scene" : {},
 			"Action" : {},
 			"View" : {
-				"TextView" : {},
+				"TextView" : {
+					"TitleTextView" : {},
+					"SentenceTextView" : {}
+				},
 				"CanvasView" : {
 					"Sprite" : {}
-				}
+				},
+				"SectionView" : {}
 			}
 		}
 	}
@@ -261,6 +275,18 @@
 				};
 
 				// this.applySettings('text');
+			},
+
+			TitleTextView : function() {
+				this.element = document.createElement('h1');
+			},
+
+			SentenceTextView : function() {
+				this.element = document.createElement('p');
+			},
+
+			SectionView : function() {
+				this.element = document.createElement('section');
 			},
 
 			CanvasView : function() {
@@ -646,15 +672,15 @@
 				};
 
 				// this.addScene = function(Obj) {
-					// Animate.tools.extend(Obj, Animate.core.Scene)
-					// var obj = new Obj();
-					// obj.applySettings('scene');
-					// if (sceneList.length !== 0) {
-						// obj.hide();
-					// }
-					// sceneList.push(obj);
-					// obj.setTo(element);
-					// return obj;
+				// Animate.tools.extend(Obj, Animate.core.Scene)
+				// var obj = new Obj();
+				// obj.applySettings('scene');
+				// if (sceneList.length !== 0) {
+				// obj.hide();
+				// }
+				// sceneList.push(obj);
+				// obj.setTo(element);
+				// return obj;
 				// };
 				this.addScene = function(Obj) {
 					Animate.tools.extend(Obj, Animate.core.Scene)
@@ -762,6 +788,27 @@
 				var Obj = Animate.tools.extend(Obj, Animate.core.TextView);
 				var obj = new Obj();
 				obj.applySettings('text');
+				return obj;
+			},
+			
+			title : function(Obj) {
+				var Obj = Animate.tools.extend(Obj, Animate.core.TitleTextView);
+				var obj = new Obj();
+				obj.applySettings('title');
+				return obj;
+			},
+
+			sentence : function(Obj) {
+				var Obj = Animate.tools.extend(Obj, Animate.core.SentenceTextView);
+				var obj = new Obj();
+				obj.applySettings('sentence');
+				return obj;
+			},
+
+			section : function(Obj) {
+				var Obj = Animate.tools.extend(Obj, Animate.core.SectionView);
+				var obj = new Obj();
+				obj.applySettings('section');
 				return obj;
 			},
 
