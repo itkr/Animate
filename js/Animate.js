@@ -21,9 +21,10 @@
 		"text" : {
 			"fontFamily" : '"arial black"',
 			"color" : "#6699cc",
-			"fontSize" : 40,
+			"fontSize" : 30,
 		},
 		"title" : {
+			"color" : "#3366ff",
 			"fontSize" : 50,
 		},
 		"sentence" : {
@@ -43,7 +44,8 @@
 				"CanvasView" : {
 					"Sprite" : {}
 				},
-				"SectionView" : {}
+				"SectionView" : {},
+				"ImageView" : {}
 			},
 			"Action" : {},
 		}
@@ -129,11 +131,6 @@
 						this.element.style.display = "none";
 					}
 				});
-
-				this.setTo = function(parent_element) {
-					parent_element.appendChild(this.element);
-					return this;
-				};
 
 				// 表示させる
 				this.show = function() {
@@ -230,7 +227,6 @@
 				});
 
 				this.setText = function(_text) {
-					text = _text;
 					this.element.innerHTML = _text;
 					return this;
 				};
@@ -256,6 +252,11 @@
 			SectionView : function() {
 				this.element = document.createElement('section');
 				this.element.setAttribute('class', 'SectionView');
+			},
+
+			ImageView : function() {
+				this.element = document.createElement('img');
+				this.element.setAttribute('class', 'ImageView');
 			},
 
 			CanvasView : function() {
@@ -396,10 +397,6 @@
 				this.element.setAttribute('class', 'Scene');
 				this.style = this.element.style;
 
-				this.setTo = function(parent_element) {
-					parent_element.appendChild(this.element);
-				};
-
 				var saveViewsParams = function() {
 					for (var i = 0; i < viewList.length; i++) {
 						viewList[i].next();
@@ -462,14 +459,6 @@
 					actionList.push(obj);
 				};
 
-				// this.add = function(obj) {
-				// if (obj.element.style.display === '') {
-				// obj.display = true;
-				// }
-				// obj.setTo(element);
-				// viewList.push(obj);
-				// return obj;
-				// };
 				this.add = function(obj) {
 					if (obj.element.style.display === '') {
 						obj.display = true;
@@ -489,7 +478,7 @@
 				};
 
 				this.deactivation = function() {
-					active = true;
+					active = false;
 					this.hide();
 				};
 
@@ -512,7 +501,6 @@
 					this.height *= magnification;
 				};
 
-				// this.applySettings('scene');
 			},
 
 			World : function(element) {
@@ -591,21 +579,10 @@
 					}
 				};
 
-				// this.addScene = function(Obj) {
-				// Animate.tools.extend(Obj, Animate.core.Scene)
-				// var obj = new Obj();
-				// obj.applySettings('scene');
-				// if (sceneList.length !== 0) {
-				// obj.hide();
-				// }
-				// sceneList.push(obj);
-				// obj.setTo(element);
-				// return obj;
-				// };
 				this.addScene = function(Obj) {
 					Animate.tools.extend(Obj, Animate.core.Scene)
 					var obj = new Obj();
-					obj.applySettings('scene');
+					obj.applySettings(obj.settings['scene']);
 					if (sceneList.length !== 0) {
 						obj.hide();
 					}
@@ -623,7 +600,6 @@
 					this.heigth *= magnification;
 				};
 
-				// this.applySettings('world');
 			},
 
 			Action : function() {
@@ -646,10 +622,9 @@
 			},
 
 			Base : function() {
-				this.applySettings = function(objType) {
-					var setting = this.settings[objType];
-					for (key in setting) {
-						this[key] = setting[key];
+				this.applySettings = function(styles) {
+					for (key in styles) {
+						this[key] = styles[key];
 					}
 				};
 
@@ -716,49 +691,55 @@
 				}
 				Animate.core.Base.prototype.settings = settings;
 				world = new Animate.core.World(element);
-				world.applySettings('world');
+				world.applySettings(world.settings['world']);
 				return world;
 			},
 
 			view : function(Obj) {
 				var Obj = Animate.tools.extend(Obj, Animate.core.View);
 				var obj = new Obj();
-				obj.applySettings('view');
+				obj.applySettings(obj.settings['view']);
 				return obj;
 			},
 
 			canvas : function(Obj) {
 				var Obj = Animate.tools.extend(Obj, Animate.core.CanvasView);
 				var obj = new Obj();
-				// obj.applySettings('canvas');
+				obj.applySettings(obj.settings['view']);
+				obj.applySettings(obj.settings['canvas']);
 				return obj;
 			},
 
 			text : function(Obj) {
 				var Obj = Animate.tools.extend(Obj, Animate.core.TextView);
 				var obj = new Obj();
-				obj.applySettings('text');
+				obj.applySettings(obj.settings['view']);
+				obj.applySettings(obj.settings['text']);
 				return obj;
 			},
 
 			title : function(Obj) {
 				var Obj = Animate.tools.extend(Obj, Animate.core.TitleTextView);
 				var obj = new Obj();
-				obj.applySettings('title');
+				obj.applySettings(obj.settings['view']);
+				obj.applySettings(obj.settings['text']);
+				obj.applySettings(obj.settings['title']);
 				return obj;
 			},
 
 			sentence : function(Obj) {
 				var Obj = Animate.tools.extend(Obj, Animate.core.SentenceTextView);
 				var obj = new Obj();
-				obj.applySettings('sentence');
+				obj.applySettings(obj.settings['view']);
+				obj.applySettings(obj.settings['text']);
+				obj.applySettings(obj.settings['sentence']);
 				return obj;
 			},
 
 			section : function(Obj) {
 				var Obj = Animate.tools.extend(Obj, Animate.core.SectionView);
 				var obj = new Obj();
-				obj.applySettings('section');
+				obj.applySettings(obj.settings['section']);
 				return obj;
 			},
 
