@@ -24,14 +24,10 @@
 			"fontSize" : 40,
 		},
 		"title" : {
-			"fontFamily" : '"arial black"',
-			"color" : "#6699cc",
 			"fontSize" : 50,
 		},
 		"sentence" : {
-			"fontFamily" : '"arial black"',
-			"color" : "#6699cc",
-			"fontSize" : 40,
+
 		},
 	};
 
@@ -39,7 +35,6 @@
 		"Base" : {
 			"World" : {},
 			"Scene" : {},
-			"Action" : {},
 			"View" : {
 				"TextView" : {
 					"TitleTextView" : {},
@@ -49,7 +44,8 @@
 					"Sprite" : {}
 				},
 				"SectionView" : {}
-			}
+			},
+			"Action" : {},
 		}
 	}
 
@@ -104,37 +100,7 @@
 				var currentHistory = 0;
 				var alpha = 100;
 				this.element = document.createElement('div');
-				this.element.setAttribute('class', 'view');
-
-				this.__defineGetter__("alpha", function() {
-					return alpha;
-				});
-
-				this.__defineSetter__("alpha", function(_alpha) {
-					alpha = _alpha;
-					this.element.style.opacity = '0.' + alpha;
-					this.element.style.filter = 'alpha(opacity=' + alpha + ')';
-					this.element.style.MozOpacity = '0.' + alpha;
-					this.element.style.MsFilter = '"alpha(opacity=' + alpha + ')"';
-				});
-
-				this.__defineGetter__("width", function() {
-					return parseInt(this.element.style.width.replace("px", ""), 10);
-				});
-
-				this.__defineSetter__("width", function(width) {
-					this.element.width = width;
-					this.element.style.width = width + 'px';
-				});
-
-				this.__defineGetter__("height", function() {
-					return parseInt(this.element.style.height.replace("px", ""), 10);
-				});
-
-				this.__defineSetter__("height", function(height) {
-					this.element.height = height;
-					this.element.style.height = height + 'px';
-				});
+				this.element.setAttribute('class', 'View');
 
 				this.__defineGetter__("x", function() {
 					return parseInt(this.element.style.left.replace("px", ""), 10);
@@ -237,6 +203,7 @@
 				var that = this;
 				var text = '';
 				this.element = document.createElement('div');
+				this.element.setAttribute('class', 'TextView');
 
 				this.__defineGetter__("fontFamily", function() {
 					return this.element.style.fontFamily;
@@ -274,19 +241,21 @@
 					this.fontSize *= magnification;
 				};
 
-				// this.applySettings('text');
 			},
 
 			TitleTextView : function() {
 				this.element = document.createElement('h1');
+				this.element.setAttribute('class', 'TitleTextView');
 			},
 
 			SentenceTextView : function() {
 				this.element = document.createElement('p');
+				this.element.setAttribute('class', 'SentenceTextView');
 			},
 
 			SectionView : function() {
 				this.element = document.createElement('section');
+				this.element.setAttribute('class', 'SectionView');
 			},
 
 			CanvasView : function() {
@@ -295,7 +264,7 @@
 				var that = this;
 				var context;
 				this.element = document.createElement('canvas');
-				this.element.setAttribute('class', 'canvasView');
+				this.element.setAttribute('class', 'CanvasView');
 				context = this.element.getContext('2d');
 
 				// 正三角形の塗り
@@ -402,8 +371,6 @@
 					context.closePath();
 				};
 
-				// this.applySettings('canvas');
-
 			},
 
 			Sprite : function(element) {
@@ -426,38 +393,8 @@
 				var active = false;
 				var that = this;
 				this.element = document.createElement('div');
-				this.element.setAttribute('class', 'scene');
+				this.element.setAttribute('class', 'Scene');
 				this.style = this.element.style;
-
-				this.__defineGetter__("alpha", function() {
-					return alpha;
-				});
-
-				this.__defineSetter__("alpha", function(_alpha) {
-					alpha = _alpha;
-					this.element.style.opacity = '0.' + alpha;
-					this.element.style.filter = 'alpha(opacity=' + alpha + ')';
-					this.element.style.MozOpacity = '0.' + alpha;
-					this.element.style.MsFilter = '"alpha(opacity=' + alpha + ')"';
-				});
-
-				this.__defineGetter__("width", function() {
-					return parseInt(this.element.style.width.replace("px", ""), 10);
-				});
-
-				this.__defineSetter__("width", function(width) {
-					this.element.width = width;
-					this.element.style.width = width + 'px';
-				});
-
-				this.__defineGetter__("height", function() {
-					return parseInt(this.element.style.height.replace("px", ""), 10);
-				});
-
-				this.__defineSetter__("height", function(height) {
-					this.element.height = height;
-					this.element.style.height = height + 'px';
-				});
 
 				this.setTo = function(parent_element) {
 					parent_element.appendChild(this.element);
@@ -602,24 +539,7 @@
 				};
 
 				this.element = element;
-
-				this.__defineGetter__("width", function() {
-					return parseInt(this.element.style.width.replace("px", ""), 10);
-				});
-
-				this.__defineSetter__("width", function(width) {
-					this.element.width = width;
-					this.element.style.width = width + 'px';
-				});
-
-				this.__defineGetter__("height", function() {
-					return parseInt(this.element.style.height.replace("px", ""), 10);
-				});
-
-				this.__defineSetter__("height", function(height) {
-					this.element.height = height;
-					this.element.style.height = height + 'px';
-				});
+				this.element.setAttribute('class', 'World');
 
 				this.lock = function() {
 					locked = true;
@@ -732,6 +652,36 @@
 						this[key] = setting[key];
 					}
 				};
+
+				this.__defineGetter__("width", function() {
+					return parseInt(this.element.style.width.replace("px", ""), 10);
+				});
+
+				this.__defineSetter__("width", function(width) {
+					this.element.width = width;
+					this.element.style.width = width + 'px';
+				});
+
+				this.__defineGetter__("height", function() {
+					return parseInt(this.element.style.height.replace("px", ""), 10);
+				});
+
+				this.__defineSetter__("height", function(height) {
+					this.element.height = height;
+					this.element.style.height = height + 'px';
+				});
+
+				this.__defineGetter__("alpha", function() {
+					return alpha;
+				});
+
+				this.__defineSetter__("alpha", function(_alpha) {
+					alpha = _alpha;
+					this.element.style.opacity = '0.' + alpha;
+					this.element.style.filter = 'alpha(opacity=' + alpha + ')';
+					this.element.style.MozOpacity = '0.' + alpha;
+					this.element.style.MsFilter = '"alpha(opacity=' + alpha + ')"';
+				});
 			}
 		};
 		Animate.tools.applyTree(objects, Animate.tree);
@@ -790,7 +740,7 @@
 				obj.applySettings('text');
 				return obj;
 			},
-			
+
 			title : function(Obj) {
 				var Obj = Animate.tools.extend(Obj, Animate.core.TitleTextView);
 				var obj = new Obj();
