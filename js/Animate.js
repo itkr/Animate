@@ -30,6 +30,9 @@
 		"sentence" : {
 
 		},
+		"section" : {
+
+		},
 	};
 
 	Animate.tree = {
@@ -252,6 +255,11 @@
 			SectionView : function() {
 				this.element = document.createElement('section');
 				this.element.setAttribute('class', 'SectionView');
+				
+				this.add = function(obj) {
+					this.element.appendChild(obj.element);
+					return this;
+				};
 			},
 
 			ImageView : function() {

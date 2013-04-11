@@ -1,6 +1,6 @@
 (function(document) {
 
-	var $ = function(id){
+	var $ = function(id) {
 		return document.getElementById(id);
 	};
 	var world = $A.init($('world'));
@@ -48,7 +48,7 @@
 				lineWidth : 6
 			});
 			this.hide();
-			this.name='c1';
+			this.name = 'c1';
 		}));
 
 		this.addAction($A.action(function() {
@@ -66,17 +66,16 @@
 		this.addAction($A.action(function() {
 			canvas1.show();
 		}));
-		
+
 		// this.addAction($A.action(function() {
-			// world.resize(0.5);
+		// world.resize(0.5);
 		// }));
 
-
 		// this.addAction($A.action(function() {
-			// canvas1.x = 0;
-			// canvas1.y = 0;
-			// canvas1.width = 500;
-			// canvas1.height = 500;
+		// canvas1.x = 0;
+		// canvas1.y = 0;
+		// canvas1.width = 500;
+		// canvas1.height = 500;
 		// }));
 		//
 		// this.addAction($A.action(function() {
@@ -100,11 +99,17 @@
 	 * Scene3
 	 */
 	var scene3 = world.addScene(function() {
-		this.add($A.title(function() {
-			this.width = 150;
-			this.y = 0;
-			this.setText('Scene3');
+		var section = $A.section(function() {});
+		section.add($A.title(function() {
+			this.setText('Animate.js');	
 		}));
+		section.add($A.sentence(function() {
+			this.setText('sample');	
+		}));
+		section.add($A.sentence(function() {
+			this.setText('code');	
+		}));
+		this.add(section);
 	});
 
 })(window.document);
