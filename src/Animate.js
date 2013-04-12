@@ -103,7 +103,6 @@
 				var that = this;
 				var history = [];
 				var currentHistory = 0;
-				var alpha = 100;
 				this.element = document.createElement('div');
 				this.element.setAttribute('class', 'View');
 
@@ -255,7 +254,7 @@
 			SectionView : function() {
 				this.element = document.createElement('section');
 				this.element.setAttribute('class', 'SectionView');
-				
+
 				this.add = function(obj) {
 					this.element.appendChild(obj.element);
 					return this;
@@ -517,16 +516,32 @@
 				var locked = false;
 				var that = this;
 
+				// var switchScene = function(beforScene, afterScene, animationType, isRivers) {
+				// that.lock();
+				// var bgcolor = 255;
+				// var anim = setInterval(function() {
+				// bgcolor -= 50;
+				// beforScene.style.backgroundColor = 'rgb(' + bgcolor + ',' + bgcolor + ',' + bgcolor + ')';
+				// if (bgcolor <= 0) {
+				// clearInterval(anim);
+				// bgcolor = 255;
+				// beforScene.style.backgroundColor = 'rgb(' + bgcolor + ',' + bgcolor + ',' + bgcolor + ')';
+				// beforScene.deactivation();
+				// afterScene.activation();
+				// that.unLock();
+				// }
+				// }, 100);
+				// };
+
 				var switchScene = function(beforScene, afterScene, animationType, isRivers) {
 					that.lock();
-					var bgcolor = 255;
+					var alpha = 100;
 					var anim = setInterval(function() {
-						bgcolor -= 50;
-						beforScene.style.backgroundColor = 'rgb(' + bgcolor + ',' + bgcolor + ',' + bgcolor + ')';
-						if (bgcolor <= 0) {
+						alpha -= 20;
+						beforScene.alpha = alpha;
+						if (alpha <= 0) {
 							clearInterval(anim);
-							bgcolor = 255;
-							beforScene.style.backgroundColor = 'rgb(' + bgcolor + ',' + bgcolor + ',' + bgcolor + ')';
+							beforScene.alpha = 100;
 							beforScene.deactivation();
 							afterScene.activation();
 							that.unLock();
@@ -630,6 +645,7 @@
 			},
 
 			Base : function() {
+				var alpha = 100;
 				this.applySettings = function(styles) {
 					for (key in styles) {
 						this[key] = styles[key];
@@ -660,9 +676,14 @@
 
 				this.__defineSetter__("alpha", function(_alpha) {
 					alpha = _alpha;
-					this.element.style.opacity = '0.' + alpha;
+					if (_alpha >= 100) {
+						this.element.style.opacity = '1';
+						this.element.style.MozOpacity = '1';
+					} else {
+						this.element.style.opacity = '0.' + alpha;
+						this.element.style.MozOpacity = '0.' + alpha;
+					}
 					this.element.style.filter = 'alpha(opacity=' + alpha + ')';
-					this.element.style.MozOpacity = '0.' + alpha;
 					this.element.style.MsFilter = '"alpha(opacity=' + alpha + ')"';
 				});
 			}
