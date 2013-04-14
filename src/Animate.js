@@ -3,6 +3,7 @@
 	var document = global.document;
 	var Animate = {};
 
+	// TODO スタイルを継承させてデザインテーマ部分はcssに任せる
 	Animate.defaultSettings = {
 		"world" : {
 			"width" : 800,
@@ -90,6 +91,20 @@
 				}
 				Animate.tools.applyTree(objects, tree[parent]);
 			}
+		},
+
+		// 参考
+		// https://gist.github.com/ryan-blunden/1495692
+		// ryan-blunden's "addClass.js"
+		addClass : function(element, newClassName) {
+			var className = element.className;
+			var classes = newClassName.split(' ');
+			var i = classes.length;
+			while (i--) {
+				className = (className.match(new RegExp('\\b' + classes[i] + '\\b')) === null ? className + ' ' + classes[i] : className);
+			}
+			element.className = className;
+			return element;
 		}
 	};
 
@@ -104,7 +119,7 @@
 				var history = [];
 				var currentHistory = 0;
 				this.element = document.createElement('div');
-				this.element.setAttribute('class', 'View');
+				Animate.tools.addClass(this.element, 'View');
 
 				this.__defineGetter__("x", function() {
 					return parseInt(this.element.style.left.replace("px", ""), 10);
@@ -202,7 +217,7 @@
 				var that = this;
 				var text = '';
 				this.element = document.createElement('div');
-				this.element.setAttribute('class', 'TextView');
+				Animate.tools.addClass(this.element, 'TextView');
 
 				this.__defineGetter__("fontFamily", function() {
 					return this.element.style.fontFamily;
@@ -243,17 +258,17 @@
 
 			TitleTextView : function() {
 				this.element = document.createElement('h1');
-				this.element.setAttribute('class', 'TitleTextView');
+				Animate.tools.addClass(this.element, 'TitleTextView');
 			},
 
 			SentenceTextView : function() {
 				this.element = document.createElement('p');
-				this.element.setAttribute('class', 'SentenceTextView');
+				Animate.tools.addClass(this.element, 'SentenceTextView');
 			},
 
 			SectionView : function() {
 				this.element = document.createElement('section');
-				this.element.setAttribute('class', 'SectionView');
+				Animate.tools.addClass(this.element, 'SectionView');
 
 				this.add = function(obj) {
 					this.element.appendChild(obj.element);
@@ -263,7 +278,7 @@
 
 			ImageView : function() {
 				this.element = document.createElement('img');
-				this.element.setAttribute('class', 'ImageView');
+				Animate.tools.addClass(this.element, 'ImageView');
 			},
 
 			CanvasView : function() {
@@ -272,7 +287,7 @@
 				var that = this;
 				var context;
 				this.element = document.createElement('canvas');
-				this.element.setAttribute('class', 'CanvasView');
+				Animate.tools.addClass(this.element, 'CanvasView');
 				context = this.element.getContext('2d');
 
 				// 正三角形の塗り
@@ -401,7 +416,7 @@
 				var active = false;
 				var that = this;
 				this.element = document.createElement('div');
-				this.element.setAttribute('class', 'Scene');
+				Animate.tools.addClass(this.element, 'Scene');
 				this.style = this.element.style;
 
 				var saveViewsParams = function() {
@@ -550,7 +565,8 @@
 				};
 
 				this.element = element;
-				this.element.setAttribute('class', 'World');
+				Animate.tools.addClass(this.element, 'World');
+				// this.element.setAttribute('class', 'World');
 
 				this.lock = function() {
 					locked = true;
