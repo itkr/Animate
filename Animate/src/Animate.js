@@ -99,8 +99,122 @@
 			}
 			element.className = className;
 			return element;
+		},
+
+		// パラメータをMixinする
+		// 継承関係にあるオブジェクトは親にあるパラメータを子で改めて定義する必要はない
+		mixinParameters : function(context, parameters) {
+			var i;
+			var paramMaster = Animate.accessers;
+			for ( i = 0; i < parameters.length; i++) {
+				paramMaster[parameters[i]](context);
+			}
 		}
 	};
+
+	Animate.accessers = (function() {
+		var objects = {
+
+			x : function(context) {
+				context.__defineGetter__("x", function() {
+					return parseInt(this.element.style.left.replace("px", ""), 10);
+				});
+				context.__defineSetter__("x", function(x) {
+					this.element.style.left = x + 'px';
+				});
+			},
+
+			y : function(context) {
+				context.__defineGetter__("y", function() {
+					return parseInt(this.element.style.top.replace("px", ""), 10);
+				});
+				context.__defineSetter__("y", function(y) {
+					this.element.style.top = y + 'px';
+				});
+			},
+
+			display : function(context) {
+				context.__defineGetter__("display", function() {
+					return this.element.style.display === "block";
+				});
+				context.__defineSetter__("display", function(display) {
+					if (display) {
+						this.element.style.display = "block";
+					} else {
+						this.element.style.display = "none";
+					}
+				});
+			},
+
+			width : function(context) {
+				context.__defineGetter__("width", function() {
+					return parseInt(this.element.style.width.replace("px", ""), 10);
+				});
+
+				context.__defineSetter__("width", function(width) {
+					this.element.width = width;
+					this.element.style.width = width + 'px';
+				});
+			},
+
+			height : function(context) {
+				context.__defineGetter__("height", function() {
+					return parseInt(this.element.style.height.replace("px", ""), 10);
+				});
+
+				context.__defineSetter__("height", function(height) {
+					this.element.height = height;
+					this.element.style.height = height + 'px';
+				});
+			},
+
+			alpha : function(context) {
+				context.__defineGetter__("alpha", function() {
+					return alpha;
+				});
+				context.__defineSetter__("alpha", function(_alpha) {
+					alpha = _alpha;
+					if (_alpha >= 100) {
+						this.element.style.opacity = '1';
+						this.element.style.MozOpacity = '1';
+					} else {
+						this.element.style.opacity = '0.' + alpha;
+						this.element.style.MozOpacity = '0.' + alpha;
+					}
+					this.element.style.filter = 'alpha(opacity=' + alpha + ')';
+					this.element.style.MsFilter = '"alpha(opacity=' + alpha + ')"';
+				});
+			},
+
+			color : function(context) {
+				context.__defineGetter__("color", function() {
+					return this.element.style.color;
+				});
+				context.__defineSetter__("color", function(color) {
+					this.element.style.color = color;
+				});
+			},
+
+			fontSize : function(context) {
+				context.__defineGetter__("fontSize", function() {
+					return parseInt(this.element.style.fontSize.replace("px", ""), 10);
+				});
+				context.__defineSetter__("fontSize", function(fontSize) {
+					this.element.style.fontSize = fontSize + 'px';
+				});
+			},
+
+			fontFamily : function(context) {
+				context.__defineGetter__("fontFamily", function() {
+					return this.element.style.fontFamily;
+				});
+				context.__defineSetter__("fontFamily", function(fontFamily) {
+					this.element.style.fontFamily = fontFamily;
+				});
+			}
+		};
+		return objects;
+	})();
 
 	/**
 	 * ベースとなるオブジェクト群
@@ -113,35 +227,9 @@
 				var history = [];
 				var currentHistory = 0;
 				this.element = document.createElement('div');
-				Animate.tools.addClass(this.element, 'View');
 
-				this.__defineGetter__("x", function() {
-					return parseInt(this.element.style.left.replace("px", ""), 10);
-				});
-
-				this.__defineSetter__("x", function(x) {
-					this.element.style.left = x + 'px';
-				});
-
-				this.__defineGetter__("y", function() {
-					return parseInt(this.element.style.top.replace("px", ""), 10);
-				});
-
-				this.__defineSetter__("y", function(y) {
-					this.element.style.top = y + 'px';
-				});
-
-				this.__defineGetter__("display", function() {
-					return this.element.style.display === "block";
-				});
-
-				this.__defineSetter__("display", function(display) {
-					if (display) {
-						this.element.style.display = "block";
-					} else {
-						this.element.style.display = "none";
-					}
-				});
+				this.parameters = ['x', 'y', 'display'];
+				Animate.tools.mixinParameters(this, this.parameters);
 
 				// 表示させる
 				this.show = function() {
@@ -211,31 +299,9 @@
 				var that = this;
 				var text = '';
 				this.element = document.createElement('div');
-				Animate.tools.addClass(this.element, 'TextView');
 
-				this.__defineGetter__("fontFamily", function() {
-					return this.element.style.fontFamily;
-				});
-
-				this.__defineSetter__("fontFamily", function(fontFamily) {
-					this.element.style.fontFamily = fontFamily;
-				});
-
-				this.__defineGetter__("color", function() {
-					return this.element.style.color;
-				});
-
-				this.__defineSetter__("color", function(color) {
-					this.element.style.color = color;
-				});
-
-				this.__defineGetter__("fontSize", function() {
-					return parseInt(this.element.style.fontSize.replace("px", ""), 10);
-				});
-
-				this.__defineSetter__("fontSize", function(fontSize) {
-					this.element.style.fontSize = fontSize + 'px';
-				});
+				this.parameters = ['fontFamily', 'color', 'fontSize'];
+				Animate.tools.mixinParameters(this, this.parameters);
 
 				this.setText = function(_text) {
 					this.element.innerHTML = _text;
@@ -252,17 +318,14 @@
 
 			TitleTextView : function() {
 				this.element = document.createElement('h1');
-				Animate.tools.addClass(this.element, 'TitleTextView');
 			},
 
 			SentenceTextView : function() {
 				this.element = document.createElement('p');
-				Animate.tools.addClass(this.element, 'SentenceTextView');
 			},
 
 			SectionView : function() {
 				this.element = document.createElement('section');
-				Animate.tools.addClass(this.element, 'SectionView');
 
 				this.add = function(obj) {
 					this.element.appendChild(obj.element);
@@ -272,7 +335,6 @@
 
 			ImageView : function() {
 				this.element = document.createElement('img');
-				Animate.tools.addClass(this.element, 'ImageView');
 			},
 
 			Scene : function() {
@@ -282,7 +344,6 @@
 				var active = false;
 				var that = this;
 				this.element = document.createElement('div');
-				Animate.tools.addClass(this.element, 'Scene');
 				this.style = this.element.style;
 
 				var saveViewsParams = function() {
@@ -414,7 +475,6 @@
 				};
 
 				this.element = element;
-				Animate.tools.addClass(this.element, 'World');
 				// this.element.setAttribute('class', 'World');
 
 				this.lock = function() {
@@ -470,7 +530,8 @@
 				this.addScene = function(Obj) {
 					Animate.tools.extend(Obj, Animate.core.Scene)
 					var obj = new Obj();
-					obj.applySettings(obj.settings['scene']);
+					obj.set(obj.settings['scene']);
+					Animate.tools.addClass(obj.element, 'Scene');
 					if (sceneList.length !== 0) {
 						obj.hide();
 					}
@@ -511,46 +572,13 @@
 
 			Base : function() {
 				var alpha = 100;
-				this.applySettings = function(styles) {
+				this.set = function(styles) {
 					for (key in styles) {
 						this[key] = styles[key];
 					}
 				};
-
-				this.__defineGetter__("width", function() {
-					return parseInt(this.element.style.width.replace("px", ""), 10);
-				});
-
-				this.__defineSetter__("width", function(width) {
-					this.element.width = width;
-					this.element.style.width = width + 'px';
-				});
-
-				this.__defineGetter__("height", function() {
-					return parseInt(this.element.style.height.replace("px", ""), 10);
-				});
-
-				this.__defineSetter__("height", function(height) {
-					this.element.height = height;
-					this.element.style.height = height + 'px';
-				});
-
-				this.__defineGetter__("alpha", function() {
-					return alpha;
-				});
-
-				this.__defineSetter__("alpha", function(_alpha) {
-					alpha = _alpha;
-					if (_alpha >= 100) {
-						this.element.style.opacity = '1';
-						this.element.style.MozOpacity = '1';
-					} else {
-						this.element.style.opacity = '0.' + alpha;
-						this.element.style.MozOpacity = '0.' + alpha;
-					}
-					this.element.style.filter = 'alpha(opacity=' + alpha + ')';
-					this.element.style.MsFilter = '"alpha(opacity=' + alpha + ')"';
-				});
+				this.parameters = ['width', 'height', 'alpha'];
+				Animate.tools.mixinParameters(this, this.parameters);
 			}
 		};
 		// Animate.tools.applyTree(objects, Animate.tree);
@@ -586,47 +614,66 @@
 				}
 				Animate.core.Base.prototype.settings = settings;
 				world = new Animate.core.World(element);
-				world.applySettings(world.settings['world']);
+				world.set(world.settings['world']);
+				Animate.tools.addClass(world.element, 'World');
 				return world;
 			},
 
 			view : function(Obj) {
 				var Obj = Animate.tools.extend(Obj, Animate.core.View);
 				var obj = new Obj();
-				obj.applySettings(obj.settings['view']);
+				Animate.tools.addClass(obj.element, 'View');
+				obj.set(obj.settings['view']);
 				return obj;
 			},
 
 			text : function(Obj) {
 				var Obj = Animate.tools.extend(Obj, Animate.core.TextView);
 				var obj = new Obj();
-				obj.applySettings(obj.settings['view']);
-				obj.applySettings(obj.settings['text']);
+				// Animate.tools.addClass(obj.element, 'View');
+				Animate.tools.addClass(obj.element, 'TextView');
+				obj.set(obj.settings['view']);
+				obj.set(obj.settings['text']);
 				return obj;
 			},
 
 			title : function(Obj) {
 				var Obj = Animate.tools.extend(Obj, Animate.core.TitleTextView);
 				var obj = new Obj();
-				obj.applySettings(obj.settings['view']);
-				obj.applySettings(obj.settings['text']);
-				obj.applySettings(obj.settings['title']);
+				// Animate.tools.addClass(obj.element, 'View');
+				// Animate.tools.addClass(obj.element, 'TextView');
+				Animate.tools.addClass(obj.element, 'TitleView');
+				obj.set(obj.settings['view']);
+				obj.set(obj.settings['text']);
+				obj.set(obj.settings['title']);
 				return obj;
 			},
 
 			sentence : function(Obj) {
 				var Obj = Animate.tools.extend(Obj, Animate.core.SentenceTextView);
 				var obj = new Obj();
-				obj.applySettings(obj.settings['view']);
-				obj.applySettings(obj.settings['text']);
-				obj.applySettings(obj.settings['sentence']);
+				// Animate.tools.addClass(obj.element, 'View');
+				// Animate.tools.addClass(obj.element, 'TextView');
+				Animate.tools.addClass(obj.element, 'SentenceTextView');
+				obj.set(obj.settings['view']);
+				obj.set(obj.settings['text']);
+				obj.set(obj.settings['sentence']);
 				return obj;
 			},
 
 			section : function(Obj) {
 				var Obj = Animate.tools.extend(Obj, Animate.core.SectionView);
 				var obj = new Obj();
-				obj.applySettings(obj.settings['section']);
+				Animate.tools.addClass(obj.element, 'SectionView');
+				obj.set(obj.settings['section']);
+				return obj;
+			},
+
+			image : function(Obj) {
+				var Obj = Animate.tools.extend(Obj, Animate.core.ImageView);
+				var obj = new Obj();
+				Animate.tools.addClass(obj.element, 'ImageView');
+				obj.set(obj.settings['image']);
 				return obj;
 			},
 

@@ -136,7 +136,7 @@ Animate.defaultSettings.canvas = {
 Animate.fn.canvas = function(Obj) {
 	var Obj = Animate.tools.extend(Obj, Animate.core.CanvasView);
 	var obj = new Obj();
-	obj.applySettings(obj.settings['view']);
-	obj.applySettings(obj.settings['canvas']);
+	obj.set(obj.settings['view']);
+	obj.set(obj.settings['canvas']);
 	return obj;
 }
