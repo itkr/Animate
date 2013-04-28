@@ -1,27 +1,37 @@
 @import url('../base.css');
+
 canvas {
 	background-color: #ccccff;
 }
+.World {
+	width: 800px;
+	height: 600px;
+}
 
 .Scene {
+	width: 800px;
+	height: 600px;
 	background-color: #ffffff;
 	-moz-box-shadow: 0 0 12px #666666, 7px 7px 7px #666666;
 	-webkit-box-shadow: 0 0 12px #666666, 7px 7px 7px #666666;
 }
 .View {
-	
+
 }
 .CanvasView {
-	
+
 }
 .TextView {
-	margin: 50px auto 50px auto;
+	font-size: 30px;
+	font-family: 'arial black';
+	color: #6699cc;
 }
 .TitleTextView {
-	
+	font-size: 50px;
+	color: #3366ff;
 }
 .SentenceTextView {
-	
+
 }
 .SectionView {
 	width: 100%;

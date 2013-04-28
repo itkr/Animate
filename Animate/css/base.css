@@ -7,18 +7,18 @@ html, body, h1, h2, h3, h4, h5, a, b, s, u, i, span, div, p, ul, ol, li, dl, dt,
 	position: relative;
 	display: block;
 }
-.View {
+/*.View {
 	position: absolute;
 	display: block;
-}
+}*/
 .CanvasView {
 	position: absolute;
 	display: block;
 }
-.TextView {
+/*.TextView {
 	position: absolute;
 	display: block;
-}
+}*/
 /*.TitleTextView {
 	position: absolute;
 	display: block;

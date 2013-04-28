@@ -3,36 +3,6 @@
 	var document = global.document;
 	var Animate = {};
 
-	// TODO スタイルを継承させてデザインテーマ部分はcssに任せる
-	Animate.defaultSettings = {
-		"world" : {
-			"width" : 800,
-			"height" : 600,
-		},
-		"scene" : {
-			"width" : 800,
-			"height" : 600,
-		},
-		"view" : {
-
-		},
-		"text" : {
-			"fontFamily" : '"arial black"',
-			"color" : "#6699cc",
-			"fontSize" : 30,
-		},
-		"title" : {
-			"color" : "#3366ff",
-			"fontSize" : 50,
-		},
-		"sentence" : {
-
-		},
-		"section" : {
-
-		},
-	};
-
 	Animate.tree = {
 		"Base" : {
 			"World" : {},
@@ -109,6 +79,41 @@
 			for ( i = 0; i < parameters.length; i++) {
 				paramMaster[parameters[i]](context);
 			}
+		},
+
+		// 継承関係にある先祖名の一覧を取得する
+		getParentNames : function(tree, klassName) {
+			var parentNames = [];
+			// 一つ上の親の名前を取得
+			var getParentKey = function(tree, klassName) {
+				var parentName = null;
+				var search = function(tree, klassName) {
+					var key;
+					for (key in tree) {
+						for (k in tree[key]) {
+							if (k == klassName) {
+								parentName = key;
+							}
+						}
+						if (parentName === null) {
+							search(tree[key], klassName);
+						}
+
+					}
+				};
+				search(tree, klassName);
+				return parentName;
+			}
+			var tempKey = getParentKey(tree, klassName);
+			while (true) {
+				parentNames.push(tempKey);
+				tempKey = getParentKey(tree, tempKey);
+				if (tempKey === null) {
+					break;
+				}
+			}
+			parentNames.reverse();
+			return parentNames;
 		}
 	};
 
@@ -530,7 +535,6 @@
 				this.addScene = function(Obj) {
 					Animate.tools.extend(Obj, Animate.core.Scene)
 					var obj = new Obj();
-					obj.set(obj.settings['scene']);
 					Animate.tools.addClass(obj.element, 'Scene');
 					if (sceneList.length !== 0) {
 						obj.hide();
@@ -609,71 +613,50 @@
 			init : function(element, settings) {
 				var world;
 				Animate.tools.applyTree(Animate.core, Animate.tree);
-				if ( typeof settings === 'undefined') {
-					settings = Animate.defaultSettings;
-				}
-				Animate.core.Base.prototype.settings = settings;
 				world = new Animate.core.World(element);
-				world.set(world.settings['world']);
 				Animate.tools.addClass(world.element, 'World');
 				return world;
 			},
 
-			view : function(Obj) {
-				var Obj = Animate.tools.extend(Obj, Animate.core.View);
+			factory : function(Obj, klassName) {
+				var Obj = Animate.tools.extend(Obj, Animate.core[klassName]);
 				var obj = new Obj();
-				Animate.tools.addClass(obj.element, 'View');
-				obj.set(obj.settings['view']);
+				var parentNames = Animate.tools.getParentNames(Animate.tree, klassName);
+				var i;
+				for ( i = 0; i < parentNames.length; i++) {
+					Animate.tools.addClass(obj.element, parentNames[i]);
+				}
+				Animate.tools.addClass(obj.element, klassName);
+				return obj;
+			},
+
+			view : function(Obj) {
+				var obj = Animate.fn.factory(Obj, 'View');
 				return obj;
 			},
 
 			text : function(Obj) {
-				var Obj = Animate.tools.extend(Obj, Animate.core.TextView);
-				var obj = new Obj();
-				// Animate.tools.addClass(obj.element, 'View');
-				Animate.tools.addClass(obj.element, 'TextView');
-				obj.set(obj.settings['view']);
-				obj.set(obj.settings['text']);
+				var obj = Animate.fn.factory(Obj, 'TextView');
 				return obj;
 			},
 
 			title : function(Obj) {
-				var Obj = Animate.tools.extend(Obj, Animate.core.TitleTextView);
-				var obj = new Obj();
-				// Animate.tools.addClass(obj.element, 'View');
-				// Animate.tools.addClass(obj.element, 'TextView');
-				Animate.tools.addClass(obj.element, 'TitleView');
-				obj.set(obj.settings['view']);
-				obj.set(obj.settings['text']);
-				obj.set(obj.settings['title']);
+				var obj = Animate.fn.factory(Obj, 'TitleTextView');
 				return obj;
 			},
 
 			sentence : function(Obj) {
-				var Obj = Animate.tools.extend(Obj, Animate.core.SentenceTextView);
-				var obj = new Obj();
-				// Animate.tools.addClass(obj.element, 'View');
-				// Animate.tools.addClass(obj.element, 'TextView');
-				Animate.tools.addClass(obj.element, 'SentenceTextView');
-				obj.set(obj.settings['view']);
-				obj.set(obj.settings['text']);
-				obj.set(obj.settings['sentence']);
+				var obj = Animate.fn.factory(Obj, 'SentenceTextView');
 				return obj;
 			},
 
 			section : function(Obj) {
-				var Obj = Animate.tools.extend(Obj, Animate.core.SectionView);
-				var obj = new Obj();
-				Animate.tools.addClass(obj.element, 'SectionView');
-				obj.set(obj.settings['section']);
+				var obj = Animate.fn.factory(Obj, 'SectionView');
 				return obj;
 			},
 
 			image : function(Obj) {
-				var Obj = Animate.tools.extend(Obj, Animate.core.ImageView);
-				var obj = new Obj();
-				Animate.tools.addClass(obj.element, 'ImageView');
-				obj.set(obj.settings['image']);
+				var obj = Animate.fn.factory(Obj, 'ImageView');
 				return obj;
 			},
 

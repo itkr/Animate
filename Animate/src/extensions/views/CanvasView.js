@@ -129,14 +129,15 @@ Animate.tree.Base.View.CanvasView = {
 	"Sprite" : {}
 }
 
-Animate.defaultSettings.canvas = {
-
-}
+// Animate.defaultSettings.canvas = {
+// 
+// }
 
 Animate.fn.canvas = function(Obj) {
 	var Obj = Animate.tools.extend(Obj, Animate.core.CanvasView);
 	var obj = new Obj();
-	obj.set(obj.settings['view']);
-	obj.set(obj.settings['canvas']);
+	Animate.tools.addClass(obj.element, 'CanvsdView');
+	// obj.set(obj.settings['view']);
+	// obj.set(obj.settings['canvas']);
 	return obj;
 }
