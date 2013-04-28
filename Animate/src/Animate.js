@@ -25,6 +25,7 @@
 	Animate.tools = {
 
 		// オブジェクトを継承させる
+		// prototype.parentはsuperとしての意味に
 		extend : function(Child, Parent) {
 			var NewParent = Parent;
 			if ( typeof Parent.prototype.parent !== "undefined") {
@@ -480,7 +481,6 @@
 				};
 
 				this.element = element;
-				// this.element.setAttribute('class', 'World');
 
 				this.lock = function() {
 					locked = true;
@@ -553,6 +553,13 @@
 					this.heigth *= magnification;
 				};
 
+				this.getCurrentSceneNumber = function() {
+					return currentScene + 1;
+				}
+
+				this.getSceneLength = function() {
+					return sceneList.length;
+				}
 			},
 
 			Action : function() {
@@ -585,7 +592,6 @@
 				Animate.tools.mixinParameters(this, this.parameters);
 			}
 		};
-		// Animate.tools.applyTree(objects, Animate.tree);
 		return objects;
 	})();
 
@@ -608,13 +614,16 @@
 	})();
 
 	Animate.fn = (function() {
+		var _world = null;
 		var objects = {
 
 			init : function(element, settings) {
 				var world;
 				Animate.tools.applyTree(Animate.core, Animate.tree);
 				world = new Animate.core.World(element);
+				Animate.tools.addClass(world.element, 'Base');
 				Animate.tools.addClass(world.element, 'World');
+				_world = world;
 				return world;
 			},
 
@@ -631,33 +640,27 @@
 			},
 
 			view : function(Obj) {
-				var obj = Animate.fn.factory(Obj, 'View');
-				return obj;
+				return Animate.fn.factory(Obj, 'View');
 			},
 
 			text : function(Obj) {
-				var obj = Animate.fn.factory(Obj, 'TextView');
-				return obj;
+				return Animate.fn.factory(Obj, 'TextView');
 			},
 
 			title : function(Obj) {
-				var obj = Animate.fn.factory(Obj, 'TitleTextView');
-				return obj;
+				return Animate.fn.factory(Obj, 'TitleTextView');
 			},
 
 			sentence : function(Obj) {
-				var obj = Animate.fn.factory(Obj, 'SentenceTextView');
-				return obj;
+				return Animate.fn.factory(Obj, 'SentenceTextView');
 			},
 
 			section : function(Obj) {
-				var obj = Animate.fn.factory(Obj, 'SectionView');
-				return obj;
+				return Animate.fn.factory(Obj, 'SectionView');
 			},
 
 			image : function(Obj) {
-				var obj = Animate.fn.factory(Obj, 'ImageView');
-				return obj;
+				return Animate.fn.factory(Obj, 'ImageView');
 			},
 
 			model : function(Obj) {
@@ -672,6 +675,14 @@
 				};
 				Animate.tools.extend(Obj, Animate.core.Action);
 				return new Obj();
+			},
+
+			currentScene : function() {
+				return _world.getCurrentSceneNumber();
+			},
+
+			sceneLength : function() {
+				return _world.getSceneLength();
 			}
 		};
 		return objects;

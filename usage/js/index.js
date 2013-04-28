@@ -4,11 +4,20 @@
 		return document.getElementById(id);
 	};
 	var world = $A.init($('world'));
+
+	function showSceneNumber() {
+		$('currencScene').innerHTML = $A.currentScene() + "/" + $A.sceneLength();
+	}
+
+
 	$('next').onclick = function() {
 		world.next();
+		showSceneNumber();
 	};
+
 	$('prev').onclick = function() {
 		world.prev();
+		showSceneNumber();
 	};
 
 	/**
@@ -129,13 +138,18 @@
 
 		this.addAction($A.action(function() {
 			canvas1.show();
+
 		}));
 		this.addAction($A.action(function() {
 			canvas2.show();
 		}));
+
 		this.addAction($A.action(function() {
 			canvas3.show();
 		}));
+
 	});
+
+	showSceneNumber();
 
 })(window.document);
