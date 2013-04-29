@@ -234,8 +234,14 @@
 				var currentHistory = 0;
 				this.element = document.createElement('div');
 
+				//仮
+				var parameters = [];
+				parameters = this.parameters;
+
 				this.parameters = ['x', 'y', 'display'];
 				Animate.tools.mixinParameters(this, this.parameters);
+
+				parameters = parameters.concat(this.parameters);
 
 				// 表示させる
 				this.show = function() {
@@ -256,19 +262,24 @@
 					return true;
 				}
 
-				this.snapShot = function(params) {
+				this.snapShot = function() {
+					var i;
 					var objParams = {};
-					objParams.x = ( typeof params.x !== 'undefined') ? params.x : this.x;
-					objParams.y = ( typeof params.y !== 'undefined') ? params.y : this.y;
-					objParams.width = ( typeof params.width !== 'undefined') ? params.width : this.width;
-					objParams.height = ( typeof params.height !== 'undefined') ? params.height : this.height;
-					objParams.display = ( typeof params.display !== 'undefined') ? params.display : this.display;
+					for ( i = 0; i < parameters.length; i++) {
+						objParams[parameters[i]] = this[parameters[i]];
+					}
+					// var objParams = {};
+					// objParams.x = ( typeof params.x !== 'undefined') ? params.x : this.x;
+					// objParams.y = ( typeof params.y !== 'undefined') ? params.y : this.y;
+					// objParams.width = ( typeof params.width !== 'undefined') ? params.width : this.width;
+					// objParams.height = ( typeof params.height !== 'undefined') ? params.height : this.height;
+					// objParams.display = ( typeof params.display !== 'undefined') ? params.display : this.display;
 					return objParams;
 				};
 
 				this.next = function() {
 					if (currentHistory === history.length) {
-						history.push(this.snapShot({}));
+						history.push(this.snapShot());
 					}
 					currentHistory += 1;
 				};
@@ -278,19 +289,31 @@
 						return false;
 					}
 					currentHistory -= 1;
-					this.x = history[currentHistory].x;
-					this.y = history[currentHistory].y;
-					this.width = history[currentHistory].width;
-					this.height = history[currentHistory].height;
-					this.display = history[currentHistory].display;
+					
+					var i;
+					for ( i = 0; i < parameters.length; i++) {
+						this[parameters[i]] = history[currentHistory][parameters[i]];
+					}
+					
+					// this.x = history[currentHistory].x;
+					// this.y = history[currentHistory].y;
+					// this.width = history[currentHistory].width;
+					// this.height = history[currentHistory].height;
+					// this.display = history[currentHistory].display;
 				};
 
 				this.reset = function() {
-					this.x = history[0].x;
-					this.y = history[0].y;
-					this.width = history[0].width;
-					this.height = history[0].height;
-					this.display = history[0].display;
+					var i;
+					for ( i = 0; i < parameters.length; i++) {
+						this[parameters[i]] = history[0][parameters[i]];
+					}
+
+					// this.x = history[0].x;
+					// this.y = history[0].y;
+					// this.width = history[0].width;
+					// this.height = history[0].height;
+					// this.display = history[0].display;
+
 					currntHistory = 0;
 				};
 
