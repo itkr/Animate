@@ -12,6 +12,7 @@ canvas {
 	width: 800px;
 	height: 600px;
 	background-color: #ffffff;
+	background-image: url("https://dl.dropboxusercontent.com/u/6396527/Animate/img/background/simple.jpg");
 	-moz-box-shadow: 0 0 12px #666666, 7px 7px 7px #666666;
 	-webkit-box-shadow: 0 0 12px #666666, 7px 7px 7px #666666;
 }
